@@ -1,0 +1,38 @@
+{
+  "HarmonyId": "dum.oldui",
+  "DisplayName": "ToS1 UI",
+  "Authors": ["Dum"],
+  "Description": "Bring back the old town of salem UI for Jailor Pirate and Necromancer",
+  "Version": "1.0.0",
+  "Platforms": ["Windows", "Mac"],
+  "RequiredMods": [],
+  "ConflictingMods": [],
+  "Settings": {
+    "CheckboxSettings": [
+      {
+        "Name": "Safe Mode",
+        "Description": "Still keeps the default buttons available, in case something goes wrong with the mod. This is the recommended setting.",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Jailor",
+        "Description": "Enables old Jailor UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Necromancer",
+        "Description": "Enables old Necromancer UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Pirate",
+        "Description": "Enables old Pirate UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      }
+    ]
+  }
+}
