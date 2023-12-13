@@ -32,6 +32,12 @@
         "Description": "Enables old Pirate UI",
         "DefaultValue": true,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Old Mayor",
+        "Description": "Enables old Necromancer UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
       }
     ]
   }

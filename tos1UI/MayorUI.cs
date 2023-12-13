@@ -16,7 +16,7 @@ namespace tos1UI
     {
         static void Postfix(PlayerIdentityData playerIdentityData, ref RoleCardPanel __instance)
         {
-            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.JAILOR)
+            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.MAYOR)
             {
                 if (!ModSettings.GetBool("Old Mayor")) return;
                 ensureButtonsMayor.setTrue();
@@ -31,7 +31,7 @@ namespace tos1UI
     {
         static void Postfix(ref RoleCardPanel __instance)
         {
-            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.JAILOR&&!ModSettings.GetBool("Safe Mode"))
+            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.MAYOR&&!ModSettings.GetBool("Safe Mode"))
             {
                 if (!ModSettings.GetBool("Old Mayor")) return;
                 ensureButtonsMayor.setTrue();
