@@ -73,6 +73,12 @@ namespace tos1UI
                 AddGhoulButton.isUsingGhoul = false;
                 changeFilterAuto.flag = false;
             }
+
+            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT && __instance.playerRole != Role.NECROMANCER
+                && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON)
+            {
+                __instance.OverrideIconAndText(TosAbilityPanelListItem.OverrideAbilityType.DEFAULT);
+            }
             if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT 
                 && AddGhoulButton.isUsingGhoul && __instance.playerRole!=Role.NECROMANCER && !__instance.playerRole.IsCovenAligned()
                 &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON)
@@ -85,7 +91,7 @@ namespace tos1UI
             }
 
             if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT
-                && !AddGhoulButton.isUsingGhoul && __instance.playerRole != Role.NECROMANCER)
+                && !AddGhoulButton.isUsingGhoul)
             {
                 if (!__instance.halo.activeSelf)
                 {
@@ -93,6 +99,31 @@ namespace tos1UI
                     __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
                     __instance.choice2Button.gameObject.SetActive(false);
                 }
+            }
+            
+            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER &&
+                __instance.playerRole == Role.NECROMANCER && phase == PlayPhase.NIGHT
+                &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON
+               )
+            {
+                if (!ModStates.IsLoaded("alchlcsystm.recolors"))
+                {
+                    __instance.choice1Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.ghoul.png");
+                }
+
+                __instance.choice1Text.text = "Raise Ghoul";
+                __instance.choice1ButtonCanvasGroup.EnableRenderingAndInteraction();
+                if (!__instance.halo.activeSelf)
+                {
+                    __instance.choice1Button.gameObject.SetActive(true);
+                }
+
+                if (AddGhoulButton.isUsingGhoul)
+                {
+                    __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                    __instance.choice2Button.gameObject.SetActive(false);
+                }
+                
             }
 
             reload[__instance.characterPosition] = false;
@@ -108,12 +139,19 @@ namespace tos1UI
         
         static void Postfix(PlayPhaseState playPhase, ref TosAbilityPanelListItem __instance)
         {
+            CleanupNecromancer.lastTarget = -1;
+            CleanupNecromancer.isCov = false;
             if (!ModSettings.GetBool("Old Necromancer")) return;
             PlayPhase phase = playPhase.playPhase;
             if (phase != PlayPhase.NIGHT)
             {
                 isUsingGhoul = false;
                 changeFilterAuto.flag = false;
+            }
+            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT && __instance.playerRole != Role.NECROMANCER
+                && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON)
+            {
+                __instance.OverrideIconAndText(TosAbilityPanelListItem.OverrideAbilityType.DEFAULT);
             }
             if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER &&
                 __instance.playerRole == Role.NECROMANCER && phase == PlayPhase.NIGHT
@@ -181,7 +219,8 @@ namespace tos1UI
     [HarmonyPatch(typeof(TosAbilityPanelListItem), "OnClickChoice1")]
     public class CleanupNecromancer
     {
-        
+        public static int lastTarget = -1;
+        public static bool isCov = false;
         static bool Prefix(ref TosAbilityPanelListItem __instance)
         {
             if (!ModSettings.GetBool("Old Necromancer")) return true;
@@ -199,6 +238,23 @@ namespace tos1UI
                     Service.Game.Network.Send((GameMessage) message);
                     ensureButtonsNecromancer.setTrue();
                     return false;
+                }else if (lastTarget!=-1)
+                {
+                    AddGhoulButton.isUsingGhoul = true;
+                    changeFilterAuto.flag = true;
+                    MenuChoiceMessage message = new MenuChoiceMessage();
+                    message.choiceType = MenuChoiceType.SpecialAbility;
+                    message.choiceMode = MenuChoiceMode.TargetPosition;
+                    message.targetIndex = lastTarget;
+                    if (isCov)
+                    {
+                        lastTarget = -1;
+                        isCov = false;
+                        changeFilterAuto.flag = true;
+                        return false;
+                    }
+                    message.targetIndex = __instance.characterPosition;
+                    Service.Game.Network.Send((GameMessage) message);
                 }
                 else
                 {
@@ -222,6 +278,14 @@ namespace tos1UI
         {
             if (!ModSettings.GetBool("Old Necromancer")) return true;
             if (Service.Game.Sim.simulation.myIdentity.Data.role != Role.NECROMANCER) return true;
+            if (__instance.playerRole.IsCovenAligned())
+            {
+                CleanupNecromancer.isCov = true;
+            }
+            else
+            {
+                CleanupNecromancer.isCov = false;
+            }
             if (AddGhoulButton.isUsingGhoul)
             {
                 __instance.PlaySound("Audio/UI/ClickSound.wav");
@@ -229,7 +293,10 @@ namespace tos1UI
                 message.choiceType = MenuChoiceType.SpecialAbility;
                 message.choiceMode = MenuChoiceMode.TargetPosition;
                 if (!__instance.choice2Button.selected)
+                {
+                    CleanupNecromancer.isCov = false;
                     message.choiceMode = MenuChoiceMode.Cancel;
+                }
                 message.targetIndex = __instance.characterPosition;
                 Service.Game.Network.Send((GameMessage) message);
                 return false;

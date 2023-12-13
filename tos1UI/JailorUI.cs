@@ -74,7 +74,7 @@ namespace tos1UI
             {
                 canJail = false;
             }
-            if (canJail && __instance.playerRole !=Role.JAILOR && phase !=PlayPhase.NIGHT && phase !=PlayPhase.NIGHT_END_CINEMATIC &&
+            if (__instance.playerRole !=Role.JAILOR && phase !=PlayPhase.NIGHT && phase !=PlayPhase.NIGHT_END_CINEMATIC &&
                 phase !=PlayPhase.NIGHT_WRAP_UP && phase!=PlayPhase.WHO_DIED_AND_HOW&& phase!=PlayPhase.POST_TRIAL_WHO_DIED_AND_HOW
                 &&__instance.characterPosition!=lastTarget&& phase != PlayPhase.DAY&&phase!=PlayPhase.FIRST_DAY&&phase!=PlayPhase.NONE
                )
@@ -84,16 +84,25 @@ namespace tos1UI
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.jail.png");
                 }
                 __instance.choice2Text.text = "Jail";
-                __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                if (__instance.characterPosition == lastTargetFresh)
+                if (!canJail)
                 {
-                    __instance.choice2Button.Select();
+                    __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                    __instance.choice2Button.gameObject.SetActive(false);
                 }
+                else
+                {
+                    __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                    if (__instance.characterPosition == lastTargetFresh)
+                    {
+                        __instance.choice2Button.Select();
+                    }
 
-                if (!__instance.halo.activeSelf)
-                {
-                    __instance.choice2Button.gameObject.SetActive(true);
+                    if (!__instance.halo.activeSelf)
+                    {
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    } 
                 }
+                
             }
 
             reload[__instance.characterPosition] = false;
@@ -128,7 +137,7 @@ namespace tos1UI
                 canJail = false;
             }
             
-            if (canJail&& Service.Game.Sim.simulation.myIdentity.Data.role==Role.JAILOR && __instance.playerRole !=Role.JAILOR && phase !=PlayPhase.NIGHT && phase !=PlayPhase.NIGHT_END_CINEMATIC &&
+            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.JAILOR && __instance.playerRole !=Role.JAILOR && phase !=PlayPhase.NIGHT && phase !=PlayPhase.NIGHT_END_CINEMATIC &&
                  phase !=PlayPhase.NIGHT_WRAP_UP && phase!=PlayPhase.WHO_DIED_AND_HOW&& phase!=PlayPhase.POST_TRIAL_WHO_DIED_AND_HOW
                  &&__instance.characterPosition!=lastTarget&& phase != PlayPhase.DAY&&phase!=PlayPhase.FIRST_DAY
                  )
@@ -138,15 +147,23 @@ namespace tos1UI
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.jail.png");
                 }
                 __instance.choice2Text.text = "Jail";
-                __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                if (__instance.characterPosition == lastTargetFresh)
+                if (!canJail)
                 {
-                    __instance.choice2Button.Select();
+                    __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                    __instance.choice2Button.gameObject.SetActive(false);
                 }
-
-                if (!__instance.halo.activeSelf)
+                else
                 {
-                    __instance.choice2Button.gameObject.SetActive(true);
+                    __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                    if (__instance.characterPosition == lastTargetFresh)
+                    {
+                        __instance.choice2Button.Select();
+                    }
+
+                    if (!__instance.halo.activeSelf)
+                    {
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    } 
                 }
             }
 

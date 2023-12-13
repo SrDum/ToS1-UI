@@ -77,7 +77,7 @@ namespace tos1UI
                 canDuel = false;
             }
 
-            if (canDuel && __instance.playerRole != Role.PIRATE&& phase != PlayPhase.NIGHT &&
+            if (__instance.playerRole != Role.PIRATE&& phase != PlayPhase.NIGHT &&
                 phase != PlayPhase.NIGHT_END_CINEMATIC &&
                 phase != PlayPhase.NIGHT_WRAP_UP && phase != PlayPhase.WHO_DIED_AND_HOW &&
                 phase != PlayPhase.POST_TRIAL_WHO_DIED_AND_HOW
@@ -91,15 +91,23 @@ namespace tos1UI
                 }
 
                 __instance.choice2Text.text = "Duel";
-                __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                if (__instance.characterPosition == lastTargetFresh)
+                if (!canDuel)
                 {
-                    __instance.choice2Button.Select();
+                    __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                    __instance.choice2Button.gameObject.SetActive(false);
                 }
-
-                if (!__instance.halo.activeSelf)
+                else
                 {
-                    __instance.choice2Button.gameObject.SetActive(true);
+                    __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                    if (__instance.characterPosition == lastTargetFresh)
+                    {
+                        __instance.choice2Button.Select();
+                    }
+
+                    if (!__instance.halo.activeSelf)
+                    {
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    } 
                 }
             }
 
@@ -136,7 +144,7 @@ namespace tos1UI
                 canDuel = false;
             }
 
-            if (canDuel && Service.Game.Sim.simulation.myIdentity.Data.role == Role.PIRATE &&
+            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.PIRATE &&
                 __instance.playerRole != Role.PIRATE && phase != PlayPhase.NIGHT &&
                 phase != PlayPhase.NIGHT_END_CINEMATIC &&
                 phase != PlayPhase.NIGHT_WRAP_UP && phase != PlayPhase.WHO_DIED_AND_HOW &&
@@ -150,15 +158,23 @@ namespace tos1UI
                 }
 
                 __instance.choice2Text.text = "Duel";
-                __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                if (__instance.characterPosition == lastTargetFresh)
+                if (!canDuel)
                 {
-                    __instance.choice2Button.Select();
+                    __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                    __instance.choice2Button.gameObject.SetActive(false);
                 }
-
-                if (!__instance.halo.activeSelf)
+                else
                 {
-                    __instance.choice2Button.gameObject.SetActive(true);
+                    __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                    if (__instance.characterPosition == lastTargetFresh)
+                    {
+                        __instance.choice2Button.Select();
+                    }
+
+                    if (!__instance.halo.activeSelf)
+                    {
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    } 
                 }
             }
 
