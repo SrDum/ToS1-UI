@@ -42,6 +42,7 @@
         <Compile Include="JailorUI.cs" />
         <Compile Include="LoadEmbeddedResources.cs" />
         <Compile Include="Main.cs" />
+        <Compile Include="MayorUI.cs" />
         <Compile Include="NecromancerUI.cs" />
         <Compile Include="PirateUI.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
@@ -93,6 +94,9 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="resources\icon.thumbnail.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="resources\reveal.png" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
