@@ -92,7 +92,7 @@
         <EmbeddedResource Include="resources\duel.png" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="resources\icon.thumbnail.png" />
+      <EmbeddedResource Include="resources\icon.thumbnail.png" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
