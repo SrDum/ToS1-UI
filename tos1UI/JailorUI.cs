@@ -70,7 +70,8 @@ namespace tos1UI
             int lastTargetFresh = AddJailButton.lastTargetFresh;
             PlayPhase phase = Service.Game.Sim.info.gameInfo.Data.playPhase;
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
-                !Service.Game.Sim.info.myDiscussionPlayer.Data.alive)
+                !Service.Game.Sim.info.myDiscussionPlayer.Data.alive ||
+                Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data.choices.Count ==0)
             {
                 canJail = false;
             }
