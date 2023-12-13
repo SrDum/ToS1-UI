@@ -193,8 +193,18 @@ namespace tos1UI
                 && postion != Service.Game.Sim.simulation.myIdentity.Data.position
                 && AddGhoulButton.isUsingGhoul  &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON)
             {
-                __result = true;
-                return false;
+                foreach(TosAbilityPanelListItem listItem in __instance.playerListPlayers)
+                {
+                    if (listItem.characterPosition == postion && !listItem.halo.activeSelf)
+                    {
+                        __result = true;
+                        return false;
+                    }
+                    if(listItem.characterPosition==postion && listItem.halo.activeSelf)
+                    {
+                        return true;
+                    }
+                }
             }
             return true;
         }
