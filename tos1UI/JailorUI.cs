@@ -69,6 +69,11 @@ namespace tos1UI
             int lastTarget = AddJailButton.lastTarget;
             int lastTargetFresh = AddJailButton.lastTargetFresh;
             PlayPhase phase = Service.Game.Sim.info.gameInfo.Data.playPhase;
+            if (phase == PlayPhase.FIRST_DAY || phase==PlayPhase.FIRST_DISCUSSION)
+            {
+                lastTarget = -1;
+                lastTargetFresh = -1;
+            }
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
                 !Service.Game.Sim.info.myDiscussionPlayer.Data.alive ||
                 Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data.choices.Count ==0)
@@ -121,7 +126,7 @@ namespace tos1UI
         {
             if (!ModSettings.GetBool("Old Jailor")) return;
             PlayPhase phase = playPhase.playPhase;
-            if (phase == PlayPhase.FIRST_DAY || phase == PlayPhase.NONE)
+            if (phase == PlayPhase.FIRST_DAY || phase == PlayPhase.NONE || phase==PlayPhase.FIRST_DISCUSSION)
             {
                 lastTarget = -1;
                 lastTargetFresh = -1;

@@ -71,6 +71,11 @@ namespace tos1UI
             int lastTarget = AddDuelButton.lastTarget;
             int lastTargetFresh = AddDuelButton.lastTargetFresh;
             PlayPhase phase = Service.Game.Sim.info.gameInfo.Data.playPhase;
+            if (phase == PlayPhase.FIRST_DAY || phase==PlayPhase.FIRST_DISCUSSION)
+            {
+                lastTarget = -1;
+                lastTargetFresh = -1;
+            }
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
                 !Service.Game.Sim.info.myDiscussionPlayer.Data.alive)
             {
