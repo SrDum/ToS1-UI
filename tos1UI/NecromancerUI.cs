@@ -91,7 +91,7 @@ namespace tos1UI
             }
 
             if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT
-                && !AddGhoulButton.isUsingGhoul)
+                && !AddGhoulButton.isUsingGhoul &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON)
             {
                 if (!__instance.halo.activeSelf)
                 {
@@ -235,7 +235,7 @@ namespace tos1UI
         {
             if (!ModSettings.GetBool("Old Necromancer")) return true;
             if (Service.Game.Sim.simulation.myIdentity.Data.role != Role.NECROMANCER) return true;
-            if (__instance.playerRole == Role.NECROMANCER)
+            if (__instance.playerRole == Role.NECROMANCER &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON)
             {
                 __instance.PlaySound("Audio/UI/ClickSound.wav");
                 if (!__instance.choice1Button.selected)
@@ -287,7 +287,7 @@ namespace tos1UI
         static bool Prefix(ref TosAbilityPanelListItem __instance)
         {
             if (!ModSettings.GetBool("Old Necromancer")) return true;
-            if (Service.Game.Sim.simulation.myIdentity.Data.role != Role.NECROMANCER) return true;
+            if (Service.Game.Sim.simulation.myIdentity.Data.role != Role.NECROMANCER || Service.Game.Sim.info.roleCardObservation.Data.powerUp!=POWER_UP_TYPE.NECRONOMICON) return true;
             if (__instance.playerRole.IsCovenAligned())
             {
                 CleanupNecromancer.isCov = true;
