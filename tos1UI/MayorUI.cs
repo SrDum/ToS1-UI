@@ -169,10 +169,12 @@ namespace tos1UI
             if (!ModSettings.GetBool("Old Mayor")) return true;
             if (Service.Game.Sim.simulation.myIdentity.Data.role!= Role.MAYOR || __instance.playerRole!=Role.MAYOR) return true;
             __instance.PlaySound("Audio/UI/ClickSound.wav");
-            MenuChoiceMessage message = new MenuChoiceMessage();
-            message.choiceType = MenuChoiceType.SpecialAbility;
-            message.choiceMode = MenuChoiceMode.None;
-            Service.Game.Network.Send((GameMessage) message);
+            Service.Game.Network.Send((GameMessage) new MenuChoiceMessage()
+            {
+                choiceType = MenuChoiceType.SpecialAbility,
+                choiceMode = MenuChoiceMode.TargetPosition,
+                targetIndex = 0
+            });
             ensureButtonsMayor.setTrue();
             return false;
         }
