@@ -74,7 +74,13 @@ namespace tos1UI
             PlayPhase phase = Service.Game.Sim.info.gameInfo.Data.playPhase;
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
                 !Service.Game.Sim.info.myDiscussionPlayer.Data.alive||
-                !Service.Game.Sim.info.roleCardObservation.Data.specialAbilityAvailable)
+                !Service.Game.Sim.info.roleCardObservation.Data.specialAbilityAvailable
+                )
+            {
+                canReveal = false;
+            }
+            
+            if (Service.Game.Sim.simulation.myIdentity.Data.role != Role.MAYOR)
             {
                 canReveal = false;
             }
@@ -113,8 +119,14 @@ namespace tos1UI
     {
         static void Postfix(PlayPhaseState playPhase, ref TosAbilityPanelListItem __instance)
         {
-            bool canReveal = true;
+            bool canReveal = false;
             PlayPhase phase = playPhase.playPhase;
+            
+            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.MAYOR)
+            {
+                canReveal = true;
+            }
+            
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
                 !Service.Game.Sim.info.myDiscussionPlayer.Data.alive ||
                 !Service.Game.Sim.info.roleCardObservation.Data.specialAbilityAvailable)
