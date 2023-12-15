@@ -62,6 +62,8 @@ namespace tos1UI
                 reload[x] = true;
             }
         }
+
+        public static bool isPressed = false;
         
         public static void Postfix(ref TosAbilityPanelListItem __instance)
         {
@@ -74,8 +76,7 @@ namespace tos1UI
                 changeFilterAuto.flag = false;
             }
 
-            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT && __instance.playerRole != Role.NECROMANCER
-                && Service.Game.Sim.info.roleCardObservation.Data.powerUp == POWER_UP_TYPE.NECRONOMICON)
+            if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT && __instance.playerRole != Role.NECROMANCER)
             {
                 __instance.OverrideIconAndText(TosAbilityPanelListItem.OverrideAbilityType.DEFAULT);
             }
@@ -91,7 +92,7 @@ namespace tos1UI
             }
 
             if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.NECROMANCER && phase == PlayPhase.NIGHT
-                && !AddGhoulButton.isUsingGhoul &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON)
+                && !isPressed &&Service.Game.Sim.info.roleCardObservation.Data.powerUp==POWER_UP_TYPE.NECRONOMICON)
             {
                 if (!__instance.halo.activeSelf)
                 {
@@ -241,6 +242,7 @@ namespace tos1UI
                 if (!__instance.choice1Button.selected)
                 {
                     AddGhoulButton.isUsingGhoul = false;
+                    ensureButtonsNecromancer.isPressed = true;
                     MenuChoiceMessage message = new MenuChoiceMessage();
                     message.choiceType = MenuChoiceType.SpecialAbility; ;
                     message.choiceMode = MenuChoiceMode.Cancel;
@@ -251,6 +253,7 @@ namespace tos1UI
                 }else if (lastTarget!=-1)
                 {
                     AddGhoulButton.isUsingGhoul = true;
+                    ensureButtonsNecromancer.isPressed = true;
                     changeFilterAuto.flag = true;
                     MenuChoiceMessage message = new MenuChoiceMessage();
                     message.choiceType = MenuChoiceType.SpecialAbility;
@@ -270,11 +273,12 @@ namespace tos1UI
                 {
                     AddGhoulButton.isUsingGhoul = true;
                     changeFilterAuto.flag = true;
-                    
+                    ensureButtonsNecromancer.isPressed = true;
                     return false;
                 }
             }
             AddGhoulButton.isUsingGhoul = false;
+            ensureButtonsNecromancer.isPressed = __instance.choice1Button.selected;
             changeFilterAuto.flag = true;
             return true;
             }
