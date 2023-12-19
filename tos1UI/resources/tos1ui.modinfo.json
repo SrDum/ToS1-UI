@@ -35,7 +35,7 @@
       },
       {
         "Name": "Old Mayor",
-        "Description": "Enables old Necromancer UI",
+        "Description": "Enables old Mayor UI",
         "DefaultValue": true,
         "AvailableInGame": true
       },
@@ -44,7 +44,14 @@
         "Description": "Enables old (style) Admirer UI",
         "DefaultValue": true,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Icon Recolors Compatibility",
+        "Description": "Lets icon recolors change custom UI. May cause white squares to appear",
+        "DefaultValue": true,
+        "AvailableInGame": true
       }
+      
     ]
   }
 }

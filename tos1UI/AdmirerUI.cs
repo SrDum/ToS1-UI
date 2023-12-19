@@ -87,6 +87,10 @@ namespace tos1UI
                 { 
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.propose.png");
                 }
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                {
+                    __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.propose.png");
+                }
                 __instance.choice2Text.text = "Propose";
                 if (!canPropose)
                 {
@@ -145,6 +149,12 @@ namespace tos1UI
                 { 
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.propose.png");
                 }
+                
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                {
+                    __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.propose.png");
+                }
+                
                 __instance.choice2Text.text = "Propose";
                 if (!canPropose)
                 {

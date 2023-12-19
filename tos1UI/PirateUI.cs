@@ -94,6 +94,11 @@ namespace tos1UI
                 {
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.duel.png");
                 }
+                
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                { 
+                    __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.duel.png");
+                }
 
                 __instance.choice2Text.text = "Duel";
                 if (!canDuel)
@@ -159,6 +164,11 @@ namespace tos1UI
             {
                 if (!ModStates.IsLoaded("alchlcsystm.recolors"))
                 {
+                    __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.duel.png");
+                }
+                
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                { 
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.duel.png");
                 }
 

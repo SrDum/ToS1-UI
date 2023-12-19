@@ -89,6 +89,11 @@ namespace tos1UI
                 { 
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.jail.png");
                 }
+
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                {
+                    __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.jail.png");
+                }
                 __instance.choice2Text.text = "Jail";
                 if (!canJail)
                 {
@@ -153,6 +158,12 @@ namespace tos1UI
                 { 
                     __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.jail.png");
                 }
+                
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                {
+                    __instance.choice2Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.jail.png");
+                }
+                
                 __instance.choice2Text.text = "Jail";
                 if (!canJail)
                 {

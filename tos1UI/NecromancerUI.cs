@@ -112,6 +112,12 @@ namespace tos1UI
                     __instance.choice1Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.ghoul.png");
                 }
 
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                { 
+                    __instance.choice1Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.ghoul.png");
+                }
+
+                
                 __instance.choice1Text.text = "Raise Ghoul";
                 __instance.choice1ButtonCanvasGroup.EnableRenderingAndInteraction();
                 if (!__instance.halo.activeSelf)
@@ -162,6 +168,11 @@ namespace tos1UI
                 if (!ModStates.IsLoaded("alchlcsystm.recolors"))
                 {
                     __instance.choice1Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.ghoul.png");
+                }
+                
+                if (!ModSettings.GetBool("Icon Recolors Compatibility"))
+                { 
+                   __instance.choice1Sprite.sprite = LoadEmbeddedResources.LoadSprite("tos1UI.resources.ghoul.png");
                 }
 
                 __instance.choice1Text.text = "Raise Ghoul";
