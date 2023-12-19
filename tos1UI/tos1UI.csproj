@@ -39,6 +39,7 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AdmirerUI.cs" />
         <Compile Include="JailorUI.cs" />
         <Compile Include="LoadEmbeddedResources.cs" />
         <Compile Include="Main.cs" />
@@ -91,6 +92,7 @@
         <EmbeddedResource Include="resources\jail.png" />
         <EmbeddedResource Include="resources\ghoul.png" />
         <EmbeddedResource Include="resources\duel.png" />
+        <EmbeddedResource Include="resources\propose.png"/>
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="resources\icon.thumbnail.png" />
