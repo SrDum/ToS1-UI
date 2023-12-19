@@ -3,7 +3,7 @@
   "DisplayName": "ToS1 UI",
   "Authors": ["Dum"],
   "Description": "Bring back the old town of salem UI for Jailor Pirate and Necromancer",
-  "Version": "1.2.0",
+  "Version": "1.2.1",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
   "ConflictingMods": [],
