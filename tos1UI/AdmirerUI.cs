@@ -71,7 +71,10 @@ namespace tos1UI
             if (phase == PlayPhase.FIRST_DAY || phase==PlayPhase.FIRST_DISCUSSION)
             {
                 lastTarget = -1;
+                return;
             }
+
+            if (AddProposeButton.dayOne) return;
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
                 !Service.Game.Sim.info.myDiscussionPlayer.Data.alive ||
                 Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data.choices.Count ==0)
@@ -123,6 +126,7 @@ namespace tos1UI
     {
         public static bool canPropose = false;
         public static int lastTarget = -1;
+        public static bool dayOne = false;
         static void Postfix(PlayPhaseState playPhase, ref TosAbilityPanelListItem __instance)
         {
             if (!ModSettings.GetBool("Old Admirer")) return;
@@ -131,6 +135,16 @@ namespace tos1UI
             if (Service.Game.Sim.simulation.myIdentity.Data.role == Role.ADMIRER)
             {
                 canPropose = true;
+            }
+
+            if (phase == PlayPhase.FIRST_DAY || phase == PlayPhase.FIRST_DISCUSSION)
+            {
+                dayOne = true;
+            }
+            else
+            {
+                dayOne = false;
+                canPropose = false;
             }
             
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
