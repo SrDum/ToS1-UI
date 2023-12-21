@@ -71,10 +71,11 @@ namespace tos1UI
             if (phase == PlayPhase.FIRST_DAY || phase==PlayPhase.FIRST_DISCUSSION)
             {
                 lastTarget = -1;
+                AddProposeButton.setTrue();
                 return;
             }
 
-            if (AddProposeButton.dayOne) return;
+            if (AddProposeButton.dayOne[__instance.characterPosition]) return;
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
                 !Service.Game.Sim.info.myDiscussionPlayer.Data.alive ||
                 Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data.choices.Count ==0)
@@ -126,9 +127,27 @@ namespace tos1UI
     {
         public static bool canPropose = false;
         public static int lastTarget = -1;
-        public static bool dayOne = false;
+        public static bool[] dayOne =
+            { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false ,false};
+
+        public static void setFalse()
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                dayOne[x] = false;
+            }
+        }
+        public static void setTrue()
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                dayOne[x] = true;
+            }
+        }
+        
         static void Postfix(PlayPhaseState playPhase, ref TosAbilityPanelListItem __instance)
         {
+            
             if (!ModSettings.GetBool("Old Admirer")) return;
             PlayPhase phase = playPhase.playPhase;
 
@@ -139,12 +158,15 @@ namespace tos1UI
 
             if (phase == PlayPhase.FIRST_DAY || phase == PlayPhase.FIRST_DISCUSSION)
             {
-                dayOne = true;
+                setTrue();
             }
             else
             {
-                dayOne = false;
-                canPropose = false;
+                if (dayOne[__instance.characterPosition])
+                {
+                    dayOne[__instance.characterPosition] = false;
+                    canPropose = false;
+                }
             }
             
             if (Service.Game.Sim.info.roleCardObservation.Data.specialAbilityRemaining == 0 ||
@@ -154,7 +176,7 @@ namespace tos1UI
                 canPropose = false;
             }
             
-            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.ADMIRER && __instance.playerRole !=Role.ADMIRER && phase !=PlayPhase.NIGHT && phase !=PlayPhase.NIGHT_END_CINEMATIC &&
+            if (canPropose && !dayOne[__instance.characterPosition] && Service.Game.Sim.simulation.myIdentity.Data.role==Role.ADMIRER && __instance.playerRole !=Role.ADMIRER && phase !=PlayPhase.NIGHT && phase !=PlayPhase.NIGHT_END_CINEMATIC &&
                  phase !=PlayPhase.NIGHT_WRAP_UP && phase!=PlayPhase.WHO_DIED_AND_HOW&& phase!=PlayPhase.POST_TRIAL_WHO_DIED_AND_HOW
                  && phase != PlayPhase.DAY&&phase!=PlayPhase.FIRST_DAY && phase != PlayPhase.FIRST_DISCUSSION
                  )
