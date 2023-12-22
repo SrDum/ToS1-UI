@@ -25,6 +25,7 @@ namespace tos1UI
                 foreach (TosAbilityPanelListItem playerListPlayer in __instance.playerListPlayers)
                 {
                     TosAbilityPanelListItem player = playerListPlayer;
+                    player.gameObject.SetActive(true);
                     if (Service.Game.Sim.info.discussionPlayers.Find((Predicate<DiscussionPlayerObservation>) (listItem => listItem.Data.position == player.characterPosition)).Data.alive)
                         player.gameObject.transform.GetChild(1).gameObject.SetActive(true);
                     else player.gameObject.transform.GetChild(1).gameObject.SetActive(false);
