@@ -12,6 +12,7 @@
         <AssemblyName>tos1UI</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,15 +42,13 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AdmirerUI.cs" />
-        <Compile Include="JailorUI.cs" />
-        <Compile Include="LoadEmbeddedResources.cs" />
+        <Compile Include="UIcontroller.cs" />
         <Compile Include="Main.cs" />
-        <Compile Include="MayorUI.cs" />
-        <Compile Include="NecromancerUI.cs" />
         <Compile Include="OldPlayerPosition.cs" />
-        <Compile Include="PirateUI.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="RoleInfo.cs" />
+        <Compile Include="RoleInfoProvider.cs" />
+        <Compile Include="SpecialAbilityTargetType.cs" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -61,10 +60,10 @@
         <Reference Include="SalemModLoader">
             <HintPath>bin\Release\SalemModLoader.dll</HintPath>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
         <Reference Include="Unity.TextMeshPro">
             <HintPath>bin\Release\Unity.TextMeshPro.dll</HintPath>
         </Reference>
@@ -95,7 +94,7 @@
         <EmbeddedResource Include="resources\jail.png" />
         <EmbeddedResource Include="resources\ghoul.png" />
         <EmbeddedResource Include="resources\duel.png" />
-        <EmbeddedResource Include="resources\propose.png"/>
+        <EmbeddedResource Include="resources\propose.png" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="resources\icon.thumbnail.png" />
