@@ -64,6 +64,7 @@ namespace tos1UI
 
         public static void Postfix(ref TosAbilityPanelListItem __instance)
         {
+            
             if (!reload[__instance.characterPosition]) return;
             bool canPropose = true;
             int lastTarget = AddProposeButton.lastTarget;

@@ -31,7 +31,7 @@ namespace tos1UI
     {
         static void Postfix(ref RoleCardPanel __instance)
         {
-            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.JAILOR&&!ModSettings.GetBool("Safe Mode"))
+            if (Service.Game.Sim.simulation.myIdentity.Data.role==Role.JAILOR)
             {
                 if (!ModSettings.GetBool("Old Jailor")) return;
                 ensureButtonsJailor.setTrue();

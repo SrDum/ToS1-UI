@@ -47,6 +47,7 @@
         <Compile Include="Main.cs" />
         <Compile Include="MayorUI.cs" />
         <Compile Include="NecromancerUI.cs" />
+        <Compile Include="OldPlayerPosition.cs" />
         <Compile Include="PirateUI.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
