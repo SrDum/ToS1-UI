@@ -47,8 +47,14 @@
       },
       {
         "Name": "Icon Recolors Compatibility",
-        "Description": "Lets icon recolors change custom UI. May cause white squares to appear",
+        "Description": "Lets icon recolors change custom UI. Set to false if seeing white squares",
         "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Player List",
+        "Description": "Makes player positions be fixed when on the show living tab",
+        "DefaultValue": false,
         "AvailableInGame": true
       }
       
