@@ -12,7 +12,7 @@
         <AssemblyName>tos1UI</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -91,16 +91,9 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="resources\tos1ui.modinfo.json" />
-        <EmbeddedResource Include="resources\jail.png" />
-        <EmbeddedResource Include="resources\ghoul.png" />
-        <EmbeddedResource Include="resources\duel.png" />
-        <EmbeddedResource Include="resources\propose.png" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="resources\icon.thumbnail.png" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="resources\reveal.png" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

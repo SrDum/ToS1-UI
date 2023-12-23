@@ -7,6 +7,7 @@ using HarmonyLib;
 using Server.Shared.Info;
 using Server.Shared.Messages;
 using Server.Shared.State;
+using UnityEngine;
 using UnityEngine.UI;
 using Service = Services.Service;
 
@@ -17,20 +18,36 @@ namespace tos1UI
     {
 
         public static Role role = Role.NONE;
-        public static Image abilityIcon;
+        public static Sprite abilityIcon;
         public static int lastClicked = -1;
         public static bool flag = false;
         public static bool specialUnlocked = false;
-        [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.HandleOnMyIdentityChanged))]
+        public static string abilityName = "";
+
+        public static bool[] render =
+        {
+            false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+            false
+        };
+
+        public static void set(bool b)
+        {
+            for (int x = 0; x < 16; x++) render[x] = b;
+        }
+        
+        
+        [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.ValidateSpecialAbilityPanel))]
         [HarmonyPostfix]
         public static void onRoleChange(ref RoleCardPanel __instance)
         {
             flag = false;
             specialUnlocked = false;
+            set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (info.isModified && !ModSettings.GetBool("Safe Mode")) __instance.specialAbilityPanel.Hide();
-            if(info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon;
+            if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
+            if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
         }
 
         [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.Update))]
@@ -38,54 +55,69 @@ namespace tos1UI
         public static void Update(ref RoleCardPanel __instance)
         {
             if (!flag) return;
-            flag = false;
+            RoleInfo info = RoleInfoProvider.getInfo(role);
             specialUnlocked = __instance.specialAbilityPanel.IsSpecialUsable();
+            if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
+            if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
+            flag = false;
+            set(true);
         }
 
-        [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.HandlePlayPhaseChanged))]
-        [HarmonyPrefix]
-        public static void checkSpecial()
+        [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
+        [HarmonyPostfix]
+        public static void onPlayPhaseChanged()
         {
             flag = true;
         }
-        [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.HandlePlayPhaseChanged))]
-        [HarmonyPostfix]
-        public static void onPlayPhaseChange(ref TosAbilityPanelListItem __instance)
-        {
-            RoleInfo info = RoleInfoProvider.getInfo(role);
-            if (!info.isModified) return;
-            if (!specialUnlocked || !ModSettings.GetBool("Old " + info.configName)) return;
-            int pos = __instance.characterPosition;
-            if (info.AbilityTargetType == SpecialAbilityTargetType.Menu)
-            {
-                List<int> choices = Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data
-                    .choices;
-                if (choices.Contains(pos))
-                {
-                    __instance.choice2Sprite = abilityIcon;
-                    __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                    if(lastClicked==pos) __instance.choice2Button.Select();
-                    __instance.choice2Button.gameObject.SetActive(true);
-                }
-                else
-                {
-                    __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
-                    __instance.choice2Button.gameObject.SetActive(false);
-                }
-            }
 
-            if (info.AbilityTargetType == SpecialAbilityTargetType.Self)
-            {
-                if (pos == Service.Game.Sim.simulation.myIdentity.Data.position)
+        [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.Update))]
+        [HarmonyPostfix]
+        public static void renderButtons(ref TosAbilityPanelListItem __instance)
+        {
+                int pos = __instance.characterPosition;
+                if (!specialUnlocked || !render[pos]) return;
+                RoleInfo info = RoleInfoProvider.getInfo(role);
+                if (!info.isModified) return;
+                if (!ModSettings.GetBool("Old " + info.configName)) return;
+                if (info.AbilityTargetType == SpecialAbilityTargetType.Menu)
                 {
-                    __instance.choice2Sprite = abilityIcon;
-                    __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                    __instance.choice2Button.gameObject.SetActive(true);
+                    List<int> choices = Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data
+                        .choices;
+                    if (choices.Contains(pos))
+                    {
+                        __instance.choice2Sprite.sprite = abilityIcon;
+                        __instance.choice2Text.text = abilityName;
+                        __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                        if (lastClicked == pos) __instance.choice2Button.Select();
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                        __instance.choice2Button.gameObject.SetActive(false);
+                    }
                 }
-            }
+
+                if (info.AbilityTargetType == SpecialAbilityTargetType.Self)
+                {
+                    if (pos == Service.Game.Sim.simulation.myIdentity.Data.position)
+                    {
+                        __instance.choice2Sprite.sprite = abilityIcon;
+                        __instance.choice2Text.text = abilityName;
+                        __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
+                        __instance.choice2Button.gameObject.SetActive(false);
+                    }
+                }
+
+                render[pos] = false;
         }
-        
-        
+
+
         [HarmonyPatch(typeof(TosAbilityPanelListItem),nameof(TosAbilityPanelListItem.OnClickChoice2))]
         [HarmonyPrefix]
         public static bool onClickChoice2(ref TosAbilityPanelListItem __instance)

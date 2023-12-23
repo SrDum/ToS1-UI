@@ -30,7 +30,6 @@ namespace tos1UI
             SpecialAbilityTargetType targetType = SpecialAbilityTargetType.None;
             bool modified = modifiedRoles.Contains(role);
             string configName ="";
-            List<PlayPhase> usable;
             if (modified) configName = configNames[role];
             if (MenuRoles.Contains(role)) targetType = SpecialAbilityTargetType.Menu;
             if (SelfTargetRoles.Contains(role)) targetType = SpecialAbilityTargetType.Self;

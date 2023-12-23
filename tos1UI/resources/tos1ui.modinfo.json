@@ -2,8 +2,8 @@
   "HarmonyId": "dum.oldui",
   "DisplayName": "ToS1 UI",
   "Authors": ["Dum"],
-  "Description": "Bring back the old town of salem UI for Jailor, Pirate, Necromancer, Admirer and Mayor",
-  "Version": "1.2.5",
+  "Description": "Bring back ToS1 style ability buttons wherever possible. Necromancer has been removed, to be re-added in future update",
+  "Version": "2.0.0",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
   "ConflictingMods": [],
@@ -18,12 +18,6 @@
       {
         "Name": "Old Jailor",
         "Description": "Enables old Jailor UI",
-        "DefaultValue": true,
-        "AvailableInGame": true
-      },
-      {
-        "Name": "Old Necromancer",
-        "Description": "Enables old Necromancer UI",
         "DefaultValue": true,
         "AvailableInGame": true
       },
@@ -46,18 +40,35 @@
         "AvailableInGame": true
       },
       {
-        "Name": "Icon Recolors Compatibility",
-        "Description": "Lets icon recolors change custom UI. Set to false if seeing white squares",
-        "DefaultValue": true,
-        "AvailableInGame": true
-      },
-      {
         "Name": "Old Player List",
         "Description": "Makes player positions be fixed when on the show living tab",
         "DefaultValue": false,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Old Cleric",
+        "Description": "Enables old (style) Cleric UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Bodyguard",
+        "Description": "Enables old (style) Bodyguard UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Veteran",
+        "Description": "Enables old Veteran UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Executioner",
+        "Description": "Enables old (style) Executioner UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
       }
-      
     ]
   }
 }
