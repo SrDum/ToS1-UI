@@ -5,6 +5,7 @@ namespace tos1UI
         Menu,
         Self,
         Necromancer,
+        SelfAndOthers,
         None,
     }
 }
