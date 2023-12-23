@@ -12,13 +12,14 @@ namespace tos1UI
         };
         private static readonly List<Role> SelfTargetRoles = new List<Role>
         {
-            Role.MAYOR, Role.VETERAN, Role.CLERIC, Role.BODYGUARD
+            Role.MAYOR, Role.VETERAN, Role.CLERIC, Role.BODYGUARD, Role.JESTER
         };
 
         private static readonly Dictionary<Role, string> configNames = new Dictionary<Role, string>()
         {
             { Role.JAILOR, "Jailor" },{Role.ADMIRER, "Admirer"},{Role.MAYOR, "Mayor"},{Role.PIRATE, "Pirate"},
-            {Role.EXECUTIONER, "Executioner"},{Role.CLERIC,"Cleric"},{Role.BODYGUARD,"Bodyguard"},{Role.VETERAN, "Veteran"}
+            {Role.EXECUTIONER, "Executioner"},{Role.CLERIC,"Cleric"},{Role.BODYGUARD,"Bodyguard"},{Role.VETERAN, "Veteran"},
+            {Role.JESTER, "Jester"}
         };
         
         private static List<Role> modifiedRoles = new List<Role>();

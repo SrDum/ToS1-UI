@@ -68,6 +68,12 @@
         "Description": "Enables old (style) Executioner UI",
         "DefaultValue": true,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Old Jester",
+        "Description": "Enables old (style) Jester UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
       }
     ]
   }

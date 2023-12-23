@@ -56,7 +56,7 @@ namespace tos1UI
         {
             if (!flag) return;
             RoleInfo info = RoleInfoProvider.getInfo(role);
-            specialUnlocked = __instance.specialAbilityPanel.IsSpecialUsable();
+            if(info.isModified) specialUnlocked = __instance.specialAbilityPanel.IsSpecialUsable();
             if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             flag = false;
@@ -102,15 +102,10 @@ namespace tos1UI
                 {
                     if (pos == Service.Game.Sim.simulation.myIdentity.Data.position)
                     {
-                        __instance.choice2Sprite.sprite = abilityIcon;
-                        __instance.choice2Text.text = abilityName;
-                        __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
-                        __instance.choice2Button.gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        __instance.choice2ButtonCanvasGroup.DisableRenderingAndInteraction();
-                        __instance.choice2Button.gameObject.SetActive(false);
+                        __instance.choice1Sprite.sprite = abilityIcon;
+                        __instance.choice1Text.text = abilityName;
+                        __instance.choice1ButtonCanvasGroup.EnableRenderingAndInteraction();
+                        __instance.choice1Button.gameObject.SetActive(true);
                     }
                 }
 
@@ -124,7 +119,9 @@ namespace tos1UI
         {
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (info.AbilityTargetType == SpecialAbilityTargetType.Necromancer) return true;
+            Console.Out.Write("[ToS 1 UI] Role is not Necromancer");
             if (!info.isModified) return true;
+            Console.Out.Write("[ToS 1 UI] role is modded");
             if (!specialUnlocked || !ModSettings.GetBool("Old " + info.configName)) return true;
             __instance.PlaySound("Audio/UI/ClickSound.wav");
             MenuChoiceMessage message = new MenuChoiceMessage();
@@ -145,17 +142,39 @@ namespace tos1UI
                 return false;
             }
 
+           
+            return true;
+        }
+
+        [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.OnClickChoice1))]
+        [HarmonyPrefix]
+        public static bool onClickChoice1(ref TosAbilityPanelListItem __instance)
+        {
+            
+            RoleInfo info = RoleInfoProvider.getInfo(role);
+            if (info.AbilityTargetType == SpecialAbilityTargetType.Necromancer) return true;
+            if (!info.isModified) return true;
+            if (!ModSettings.GetBool("Old " + info.configName)) return true;
+            int myPos = Service.Game.Sim.simulation.myIdentity.Data.position;
+            MenuChoiceMessage message = new MenuChoiceMessage();
+            message.choiceType = MenuChoiceType.SpecialAbility;
+            message.choiceMode = MenuChoiceMode.TargetPosition;
             if (info.AbilityTargetType == SpecialAbilityTargetType.Self)
             {
-                message.targetIndex = 0;
-                if (!__instance.choice2Button.selected)
+                if (__instance.characterPosition == myPos)
                 {
-                    message.choiceMode = MenuChoiceMode.Cancel;
-                    lastClicked = -1;
+                    __instance.PlaySound("Audio/UI/ClickSound.wav");
+                    if (!__instance.choice1Button.selected)
+                    {
+                        message.choiceMode = MenuChoiceMode.Cancel;
+                    }
+                    Service.Game.Network.Send((GameMessage) message);
+                    return false;
+
                 }
-                Service.Game.Network.Send((GameMessage) message);
-                return false;
+               
             }
+
             return true;
         }
     }
