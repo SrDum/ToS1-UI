@@ -15,6 +15,12 @@ namespace tos1UI
             Role.MAYOR, Role.VETERAN, Role.CLERIC, Role.BODYGUARD, Role.JESTER
         };
 
+        private static readonly List<Role> SafeModeTracking = new List<Role>
+        {
+            Role.CLERIC, Role.VETERAN, Role.BODYGUARD, Role.JESTER
+        };
+
+
         private static readonly Dictionary<Role, string> configNames = new Dictionary<Role, string>()
         {
             { Role.JAILOR, "Jailor" },{Role.ADMIRER, "Admirer"},{Role.MAYOR, "Mayor"},{Role.PIRATE, "Pirate"},
@@ -33,14 +39,15 @@ namespace tos1UI
         
         public static RoleInfo getInfo(Role role)
         {
-            if (role == Role.NECROMANCER) return new RoleInfo(SpecialAbilityTargetType.Necromancer, false,"");
+            if (role == Role.NECROMANCER) return new RoleInfo(SpecialAbilityTargetType.Necromancer, false,"", false);
             SpecialAbilityTargetType targetType = SpecialAbilityTargetType.None;
             bool modified = modifiedRoles.Contains(role);
+            bool track = SafeModeTracking.Contains(role);
             string configName ="";
             if (modified) configName = configNames[role];
             if (MenuRoles.Contains(role)) targetType = SpecialAbilityTargetType.Menu;
             if (SelfTargetRoles.Contains(role)) targetType = SpecialAbilityTargetType.Self;
-            return new RoleInfo(targetType, modified,configName);
+            return new RoleInfo(targetType, modified,configName, track);
         }
     }
 }

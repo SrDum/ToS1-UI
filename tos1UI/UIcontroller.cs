@@ -7,6 +7,8 @@ using HarmonyLib;
 using Server.Shared.Info;
 using Server.Shared.Messages;
 using Server.Shared.State;
+using Server.Shared.State.Chat;
+using tos1UI.borrowedCode;
 using UnityEngine;
 using UnityEngine.UI;
 using Service = Services.Service;
@@ -23,6 +25,7 @@ namespace tos1UI
         public static bool flag = false;
         public static bool specialUnlocked = false;
         public static string abilityName = "";
+        public static int specialCharges = -69;
 
         public static bool[] render =
         {
@@ -45,7 +48,7 @@ namespace tos1UI
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
-            if (info.isModified && !ModSettings.GetBool("Safe Mode")) __instance.specialAbilityPanel.Hide();
+            if (info.isModified && !ModSettings.GetBool("Safe Mode")) __instance.specialAbilityPanel.Hide(); 
             if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
         }
@@ -61,6 +64,21 @@ namespace tos1UI
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             flag = false;
             set(true);
+        }
+
+        [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnRoleCardDataChanged))]
+        [HarmonyPostfix]
+        public static void getRemaining(RoleCardData data)
+        {
+            
+            if (data.specialAbilityTotal > 0)
+            {
+                specialCharges = data.specialAbilityRemaining;
+            }
+            else
+            {
+                specialCharges = -69;
+            }
         }
 
         [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
@@ -79,6 +97,12 @@ namespace tos1UI
                 RoleInfo info = RoleInfoProvider.getInfo(role);
                 if (!info.isModified) return;
                 if (!ModSettings.GetBool("Old " + info.configName)) return;
+                
+                if (info.track && specialCharges >= 0 && !ModSettings.GetBool("Safe Mode") && specialUnlocked)
+                {
+                    ChatUtils.AddMessage(message:"You have "+specialCharges+" "+abilityName+"s remaining.");
+                }
+                
                 if (info.AbilityTargetType == SpecialAbilityTargetType.Menu)
                 {
                     List<int> choices = Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data

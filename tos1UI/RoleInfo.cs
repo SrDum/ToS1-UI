@@ -14,5 +14,5 @@ namespace tos1UI
 {
     
     
-    public record RoleInfo(SpecialAbilityTargetType AbilityTargetType, bool isModified, string configName);
+    public record RoleInfo(SpecialAbilityTargetType AbilityTargetType, bool isModified, string configName, bool track);
 }
