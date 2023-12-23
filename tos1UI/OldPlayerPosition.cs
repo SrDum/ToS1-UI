@@ -20,7 +20,9 @@ namespace tos1UI
         public static bool phaseChange(ref TosAbilityPanel __instance)
         {
             if (!ModSettings.GetBool("Old Player List")) return true;
-            if (__instance.selectedFilter == TosAbilityPanel.FilterType.SHOW_LIVING)
+            if (__instance.selectedFilter == TosAbilityPanel.FilterType.SHOW_LIVING &&
+                Service.Game.Sim.info.gameInfo.Data.playPhase !=PlayPhase.POST_TRIAL_WHO_DIED_AND_HOW &&
+                Service.Game.Sim.info.gameInfo.Data.playPhase !=PlayPhase.WHO_DIED_AND_HOW )
             {
                 foreach (TosAbilityPanelListItem playerListPlayer in __instance.playerListPlayers)
                 {

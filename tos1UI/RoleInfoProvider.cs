@@ -6,13 +6,19 @@ namespace tos1UI
 {
     public static class RoleInfoProvider
     {
-        private static readonly List<Role> MenuRoles = new List<Role> { Role.JAILOR, Role.ADMIRER, Role.PIRATE };
-        private static readonly List<Role> SelfTargetRoles = new List<Role> { Role.MAYOR};
+        private static readonly List<Role> MenuRoles = new List<Role>
+        {
+            Role.JAILOR, Role.ADMIRER, Role.PIRATE,Role.EXECUTIONER
+        };
+        private static readonly List<Role> SelfTargetRoles = new List<Role>
+        {
+            Role.MAYOR, Role.VETERAN, Role.CLERIC, Role.BODYGUARD
+        };
 
         private static readonly Dictionary<Role, string> configNames = new Dictionary<Role, string>()
         {
             { Role.JAILOR, "Jailor" },{Role.ADMIRER, "Admirer"},{Role.MAYOR, "Mayor"},{Role.PIRATE, "Pirate"},
-            {Role.NECROMANCER, "Necromancer"}
+            {Role.EXECUTIONER, "Executioner"},{Role.CLERIC,"Cleric"},{Role.BODYGUARD,"Bodyguard"},{Role.VETERAN, "Veteran"}
         };
         
         private static List<Role> modifiedRoles = new List<Role>();
