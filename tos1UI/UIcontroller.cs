@@ -64,6 +64,10 @@ namespace tos1UI
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             flag = false;
             set(true);
+            if (info.track && specialCharges >= 0 && !ModSettings.GetBool("Safe Mode") && specialUnlocked)
+            {
+               ChatUtils.AddMessage(message:"You have "+specialCharges+" "+abilityName+" remaining.");
+            }
         }
 
         [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnRoleCardDataChanged))]
@@ -97,12 +101,6 @@ namespace tos1UI
                 RoleInfo info = RoleInfoProvider.getInfo(role);
                 if (!info.isModified) return;
                 if (!ModSettings.GetBool("Old " + info.configName)) return;
-                
-                if (info.track && specialCharges >= 0 && !ModSettings.GetBool("Safe Mode") && specialUnlocked)
-                {
-                    ChatUtils.AddMessage(message:"You have "+specialCharges+" "+abilityName+"s remaining.");
-                }
-                
                 if (info.AbilityTargetType == SpecialAbilityTargetType.Menu)
                 {
                     List<int> choices = Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data
