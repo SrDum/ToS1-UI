@@ -2,8 +2,8 @@
   "HarmonyId": "dum.oldui",
   "DisplayName": "ToS1 UI",
   "Authors": ["Dum"],
-  "Description": "Bring back the old town of salem UI for Jailor, Pirate, Necromancer, Admirer and Mayor",
-  "Version": "1.2.5",
+  "Description": "Bring back ToS1 style ability buttons wherever possible. Necromancer has been removed, to be re-added in future update",
+  "Version": "2.0.0",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
   "ConflictingMods": [],
@@ -11,19 +11,13 @@
     "CheckboxSettings": [
       {
         "Name": "Safe Mode",
-        "Description": "Still keeps the default buttons available, in case something goes wrong with the mod. This is the recommended setting.",
-        "DefaultValue": true,
+        "Description": "Still keeps the default buttons available, in case something goes wrong with the mod. This is the recommended setting for ranked play.",
+        "DefaultValue":  false,
         "AvailableInGame": true
       },
       {
         "Name": "Old Jailor",
         "Description": "Enables old Jailor UI",
-        "DefaultValue": true,
-        "AvailableInGame": true
-      },
-      {
-        "Name": "Old Necromancer",
-        "Description": "Enables old Necromancer UI",
         "DefaultValue": true,
         "AvailableInGame": true
       },
@@ -46,12 +40,47 @@
         "AvailableInGame": true
       },
       {
-        "Name": "Icon Recolors Compatibility",
-        "Description": "Lets icon recolors change custom UI. May cause white squares to appear",
+        "Name": "Old Player List",
+        "Description": "Makes player positions be fixed when on the show living tab",
+        "DefaultValue": false,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Cleric",
+        "Description": "Enables old (style) Cleric UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Bodyguard",
+        "Description": "Enables old (style) Bodyguard UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Veteran",
+        "Description": "Enables old Veteran UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Executioner",
+        "Description": "Enables old (style) Executioner UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Jester",
+        "Description": "Enables old (style) Jester UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Trapper",
+        "Description": "Enables old Trapper UI",
         "DefaultValue": true,
         "AvailableInGame": true
       }
-      
     ]
   }
 }
