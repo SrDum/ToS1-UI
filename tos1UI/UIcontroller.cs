@@ -66,7 +66,7 @@ namespace tos1UI
             set(true);
             if (info.track && specialCharges >= 0 && !ModSettings.GetBool("Safe Mode") && specialUnlocked)
             {
-               ChatUtils.AddMessage(message:"You have "+specialCharges+" "+abilityName+" remaining.");
+               ChatUtils.AddMessage(message:"You have "+specialCharges+" "+abilityName+"s remaining.");
             }
         }
 

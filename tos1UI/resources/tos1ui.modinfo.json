@@ -11,8 +11,8 @@
     "CheckboxSettings": [
       {
         "Name": "Safe Mode",
-        "Description": "Still keeps the default buttons available, in case something goes wrong with the mod. This is the recommended setting.",
-        "DefaultValue": true,
+        "Description": "Still keeps the default buttons available, in case something goes wrong with the mod. This is the recommended setting for ranked play.",
+        "DefaultValue":  false,
         "AvailableInGame": true
       },
       {
@@ -72,6 +72,12 @@
       {
         "Name": "Old Jester",
         "Description": "Enables old (style) Jester UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Trapper",
+        "Description": "Enables old Trapper UI",
         "DefaultValue": true,
         "AvailableInGame": true
       }
