@@ -12,7 +12,7 @@ namespace tos1UI
         };
         private static readonly List<Role> SelfTargetRoles = new List<Role>
         {
-            Role.MAYOR, Role.VETERAN, Role.CLERIC, Role.BODYGUARD, Role.JESTER
+            Role.MAYOR, Role.VETERAN, Role.CLERIC, Role.BODYGUARD, Role.JESTER, Role.TRAPPER
         };
 
         private static readonly List<Role> SafeModeTracking = new List<Role>
@@ -25,7 +25,7 @@ namespace tos1UI
         {
             { Role.JAILOR, "Jailor" },{Role.ADMIRER, "Admirer"},{Role.MAYOR, "Mayor"},{Role.PIRATE, "Pirate"},
             {Role.EXECUTIONER, "Executioner"},{Role.CLERIC,"Cleric"},{Role.BODYGUARD,"Bodyguard"},{Role.VETERAN, "Veteran"},
-            {Role.JESTER, "Jester"}
+            {Role.JESTER, "Jester"}, {Role.TRAPPER,"Trapper"}
         };
         
         private static List<Role> modifiedRoles = new List<Role>();
