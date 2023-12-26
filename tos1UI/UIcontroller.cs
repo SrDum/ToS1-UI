@@ -80,8 +80,8 @@ namespace tos1UI
         [HarmonyPostfix]
         public static void getRemaining(RoleCardData data)
         {
-            
-            if (data.specialAbilityTotal > 0)
+            RoleInfo info = RoleInfoProvider.getInfo(Service.Game.Sim.info.simulation.myIdentity.Data.role);
+            if (data.specialAbilityTotal > 0 && info.isModified)
             {
                 specialCharges = data.specialAbilityRemaining;
                 pips.SetCurrentPips(specialCharges);
