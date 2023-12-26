@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Game.Interface;
 using Game.Services;
 using SML;
 using HarmonyLib;
+using Server.Shared.Extensions;
 using Server.Shared.Info;
 using Server.Shared.Messages;
 using Server.Shared.State;
 using Server.Shared.State.Chat;
 using tos1UI.borrowedCode;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Service = Services.Service;
 
@@ -26,6 +30,11 @@ namespace tos1UI
         public static bool specialUnlocked = false;
         public static string abilityName = "";
         public static int specialCharges = -69;
+        private static PipController pips;
+        private static PipController fpips;
+        private static RoleCardPanel panel;
+        private static RoleCardPopupPanel foo;
+        private static string abilityDec;
 
         public static bool[] render =
         {
@@ -48,9 +57,10 @@ namespace tos1UI
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
-            if (info.isModified && !ModSettings.GetBool("Safe Mode")) __instance.specialAbilityPanel.Hide(); 
+            if (info.isModified) __instance.specialAbilityPanel.Hide(); 
             if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
+            if (info.isModified) abilityDec = __instance.specialAbilityPanel.abilityDesc;
         }
 
         [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.Update))]
@@ -64,20 +74,17 @@ namespace tos1UI
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             flag = false;
             set(true);
-            if (info.track && specialCharges >= 0 && !ModSettings.GetBool("Safe Mode") && specialUnlocked)
-            {
-               ChatUtils.AddMessage(message:"You have "+specialCharges+" "+abilityName+"s remaining.");
-            }
         }
 
         [HarmonyPatch(typeof(RoleCardPanel), nameof(RoleCardPanel.HandleOnRoleCardDataChanged))]
         [HarmonyPostfix]
         public static void getRemaining(RoleCardData data)
         {
-            
-            if (data.specialAbilityTotal > 0)
+            RoleInfo info = RoleInfoProvider.getInfo(Service.Game.Sim.info.simulation.myIdentity.Data.role);
+            if (data.specialAbilityTotal > 0 && info.isModified)
             {
                 specialCharges = data.specialAbilityRemaining;
+                pips.SetCurrentPips(specialCharges);
             }
             else
             {
@@ -198,6 +205,145 @@ namespace tos1UI
             }
 
             return true;
+        }
+        [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.DetermineFrameAndSlots_AbilityIcon2))]
+        [HarmonyPostfix]
+        public static void LoadSpecial(ref RoleCardPanel __instance)
+        {
+            role = Service.Game.Sim.simulation.myIdentity.Data.role;
+            RoleInfo info = RoleInfoProvider.getInfo(role);
+            if (!info.isModified) return;
+            int uses = Service.Game.Sim.info.roleCardObservation.Data.specialAbilityTotal;
+            panel = __instance;
+            if (uses == -1)
+            {
+                uses = 4;
+            }
+            BaseAbilityButton button = __instance.roleInfoButtonTemplates.GetElement<BaseAbilityButton>(uses);
+            if ((UnityEngine.Object)button == (UnityEngine.Object)null)
+            {
+                Console.WriteLine($"[ToS 1 UI]: Failed to find template with {0} total uses", uses);
+            }
+            else
+            {
+                BaseAbilityButton baseAbilityButton = UnityEngine.Object.Instantiate<BaseAbilityButton>(button, button.transform.parent);
+                __instance.roleInfoButtons.Add(baseAbilityButton);
+                pips = baseAbilityButton.GetComponentInChildren<PipController>();
+                BaseAbilityButton element2 = __instance.roleInfoButtons.GetElement<BaseAbilityButton>(__instance.infoButtonsShowing);
+                if ((UnityEngine.Object) element2 == (UnityEngine.Object) null)
+                {
+                    Debug.LogError(string.Format("[ToS 1 UI]: Failed to find activateButton at infoButtonsShowing {0}", (object) __instance.infoButtonsShowing));
+                }
+                else
+                {
+                    element2.gameObject.SetActive(true);
+                    element2.abilityIcon.sprite = abilityIcon;
+                    EventTrigger.Entry entry = new EventTrigger.Entry();
+                    entry.eventID = EventTriggerType.PointerEnter;
+                    entry.callback.AddListener((UnityAction<BaseEventData>) (eventData => panel.OnRollOverSpecialAbility(abilityDec)));
+                    EventTrigger component = element2.GetComponent<EventTrigger>();
+                    if ((UnityEngine.Object) component != (UnityEngine.Object) null)
+                        component.triggers.Add(entry);
+                    else
+                        Console.Out.WriteLine("[ToS 1 UI]: Failed to find event triggers");
+                    __instance.infoButtonsShowing=__instance.infoButtonsShowing+1;
+                }   
+            }
+        }
+
+        [HarmonyPatch(typeof(RoleCardPopupPanel),nameof(RoleCardPopupPanel.DetermineFrameAndSlots))]
+        [HarmonyPrefix]
+        public static bool popupUI(ref RoleCardPopupPanel __instance, Role role, RoleCardData roleCardData)
+        { 
+            if (roleCardData == null) return true;
+            RoleInfo info = RoleInfoProvider.getInfo(role);
+            if (!info.isModified) return true;
+            __instance.ShowAttackAndDefense(roleCardData);
+            __instance.infoButtonsShowing = 0;
+            foo = __instance;
+            if (__instance.roleInfoButtons.Count > 0){
+                foreach (Component roleInfoButton in __instance.roleInfoButtons) UnityEngine.Object.Destroy((UnityEngine.Object) roleInfoButton.gameObject);
+            }
+            __instance.roleInfoButtons.Clear();
+            if ((UnityEngine.Object) __instance.myData.abilityIcon != (UnityEngine.Object) null)
+            {
+                int index = roleCardData.normalAbilityTotal;
+                if (index == -1) index = 4;
+                BaseAbilityButton baseAbilityButton = UnityEngine.Object.Instantiate<BaseAbilityButton>(__instance.roleInfoButtonTemplates[index], __instance.roleInfoButtonTemplates[index].transform.parent);
+                __instance.roleInfoButtons.Add(baseAbilityButton);
+                __instance.pips = baseAbilityButton.GetComponentInChildren<PipController>();
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].gameObject.SetActive(true);
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].abilityIcon.sprite = __instance.myData.abilityIcon;
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerEnter;
+                entry.callback.AddListener((UnityAction<BaseEventData>) (eventData => foo.OnClickRoleAbility()));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].GetComponent<EventTrigger>().triggers.Add(entry);
+                ++__instance.infoButtonsShowing;
+            }
+            if ((UnityEngine.Object) __instance.myData.abilityIcon2 != (UnityEngine.Object) null)
+            {
+                __instance.roleInfoButtons.Add(UnityEngine.Object.Instantiate<BaseAbilityButton>(__instance.roleInfoButtonTemplates[0], __instance.roleInfoButtonTemplates[0].transform.parent));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].gameObject.SetActive(true);
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].abilityIcon.sprite = __instance.myData.abilityIcon2;
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerEnter;
+                entry.callback.AddListener((UnityAction<BaseEventData>) (eventData => foo.OnClickRoleAbility2()));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].GetComponent<EventTrigger>().triggers.Add(entry);
+                ++__instance.infoButtonsShowing;
+            } 
+            if (info.isModified && roleCardData.specialAbilityAvailable)
+            {
+                string desc = __instance.l10n(__instance.myData.specialAbilityDesc);
+                int index = roleCardData.specialAbilityTotal;
+                if (index == -1) index = 4;
+                 BaseAbilityButton baseAbilityButton = UnityEngine.Object.Instantiate<BaseAbilityButton>(__instance.roleInfoButtonTemplates[index], __instance.roleInfoButtonTemplates[index].transform.parent);
+                __instance.roleInfoButtons.Add(baseAbilityButton);
+                fpips = baseAbilityButton.GetComponentInChildren<PipController>();
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].gameObject.SetActive(true);
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].abilityIcon.sprite = __instance.myData.specialAbilityIcon;
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerEnter;
+                entry.callback.AddListener((UnityAction<BaseEventData>) (eventData => foo.OnRollOverSpecialAbility(desc)));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].GetComponent<EventTrigger>().triggers.Add(entry);
+                ++__instance.infoButtonsShowing;
+            }
+            if ((UnityEngine.Object) __instance.myData.attributeIcon != (UnityEngine.Object) null)
+            {
+                __instance.roleInfoButtons.Add(UnityEngine.Object.Instantiate<BaseAbilityButton>(__instance.roleInfoButtonTemplates[0], __instance.roleInfoButtonTemplates[0].transform.parent));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].gameObject.SetActive(true);
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].abilityIcon.sprite = __instance.myData.attributeIcon;
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerEnter;
+                entry.callback.AddListener((UnityAction<BaseEventData>) (eventData => foo.OnClickRoleAttributes()));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].GetComponent<EventTrigger>().triggers.Add(entry);
+                ++__instance.infoButtonsShowing;
+            }
+            if (role.IsCovenAligned())
+            { 
+                __instance.roleInfoButtons.Add(UnityEngine.Object.Instantiate<BaseAbilityButton>(__instance.roleInfoButtonTemplates[0], __instance.roleInfoButtonTemplates[0].transform.parent));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].gameObject.SetActive(true);
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].abilityIcon.sprite = __instance.roleData.generalData.abilityIcon2;
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerEnter;
+                entry.callback.AddListener((UnityAction<BaseEventData>) (eventData => foo.OnClickNecronomicon()));
+                __instance.roleInfoButtons[__instance.infoButtonsShowing].GetComponent<EventTrigger>().triggers.Add(entry);
+                ++__instance.infoButtonsShowing;
+            }
+            if (!((UnityEngine.Object) __instance.infoSlots[__instance.infoButtonsShowing] != (UnityEngine.Object) null))
+                return true; 
+            __instance.infoSlot.sprite = __instance.infoSlots[__instance.infoButtonsShowing].sprite;
+            return false; 
+        }
+
+        [HarmonyPatch(typeof(RoleCardPopupPanel), nameof(RoleCardPopupPanel.ValidateSpecialAbilityPanel))]
+        [HarmonyPostfix]
+        public static void hide(ref RoleCardPopupPanel __instance)
+        {
+            RoleInfo info = RoleInfoProvider.getInfo(__instance.myData.role);
+            if (info.isModified)
+            {
+                __instance.specialAbilityPanel.Hide();
+            }
         }
     }
 }

@@ -80,6 +80,12 @@
         "Description": "Enables old Trapper UI",
         "DefaultValue": true,
         "AvailableInGame": true
+      },
+      {
+        "Name": "Old Arsonist",
+        "Description": "Enables old Arsonist UI",
+        "DefaultValue": true,
+        "AvailableInGame": true
       }
     ]
   }
