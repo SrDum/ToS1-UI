@@ -53,6 +53,7 @@ namespace tos1UI
         public static void onRoleChange(ref RoleCardPanel __instance)
         {
             flag = false;
+            lastClicked = -1;
             specialUnlocked = false;
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
