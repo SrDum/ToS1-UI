@@ -3,39 +3,33 @@
   "DisplayName": "ToS1 UI",
   "Authors": ["Dum"],
   "Description": "Bring back ToS1 style ability buttons wherever possible. Necromancer has been removed, to be re-added in future update",
-  "Version": "2.0.0",
+  "Version": "2.1.0",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
   "ConflictingMods": [],
   "Settings": {
     "CheckboxSettings": [
       {
-        "Name": "Safe Mode",
-        "Description": "Still keeps the default buttons available, in case something goes wrong with the mod. This is the recommended setting for ranked play.",
-        "DefaultValue":  false,
-        "AvailableInGame": true
-      },
-      {
-        "Name": "Old Jailor",
-        "Description": "Enables old Jailor UI",
+        "Name": "Jailor",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Pirate",
-        "Description": "Enables old Pirate UI",
+        "Name": "Pirate",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Mayor",
-        "Description": "Enables old Mayor UI",
+        "Name": "Mayor",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Admirer",
-        "Description": "Enables old (style) Admirer UI",
+        "Name": "Admirer",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
@@ -46,47 +40,71 @@
         "AvailableInGame": true
       },
       {
-        "Name": "Old Cleric",
-        "Description": "Enables old (style) Cleric UI",
+        "Name": "Cleric",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Bodyguard",
-        "Description": "Enables old (style) Bodyguard UI",
+        "Name": "Bodyguard",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Veteran",
-        "Description": "Enables old Veteran UI",
+        "Name": "Veteran",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Executioner",
-        "Description": "Enables old (style) Executioner UI",
+        "Name": "Executioner",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Jester",
-        "Description": "Enables old (style) Jester UI",
+        "Name": "Jester",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Trapper",
-        "Description": "Enables old Trapper UI",
+        "Name": "Trapper",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
       },
       {
-        "Name": "Old Arsonist",
-        "Description": "Enables old Arsonist UI",
+        "Name": "Arsonist",
+        "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
         "AvailableInGame": true
-      }
+      },
+      {
+        "Name": "Coroner",
+        "Description": "Enables tos1 style targeting for this role",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Poisoner",
+        "Description": "Enables tos1 style targeting for this role",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Shroud",
+        "Description": "Enables tos1 style targeting for this role",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Serial Killer",
+        "Description": "Enables tos1 style targeting for this role",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
     ]
   }
 }
