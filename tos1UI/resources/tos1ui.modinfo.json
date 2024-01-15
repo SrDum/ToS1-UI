@@ -34,12 +34,6 @@
         "AvailableInGame": true
       },
       {
-        "Name": "Old Player List",
-        "Description": "Makes player positions be fixed when on the show living tab",
-        "DefaultValue": false,
-        "AvailableInGame": true
-      },
-      {
         "Name": "Cleric",
         "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
@@ -105,6 +99,24 @@
         "DefaultValue": true,
         "AvailableInGame": true
       },
+      {
+        "Name": "Marshal",
+        "Description": "Enables tos1 style targeting for this role",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Socialite",
+        "Description": "Enables tos1 style targeting for this role",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Old Player List",
+        "Description": "Makes player positions be fixed when on the show living tab",
+        "DefaultValue": false,
+        "AvailableInGame": true
+      }
     ]
   }
 }
