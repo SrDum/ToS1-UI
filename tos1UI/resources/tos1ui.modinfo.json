@@ -100,12 +100,6 @@
         "AvailableInGame": true
       },
       {
-        "Name": "Coven Leader",
-        "Description": "Enables tos1 style targeting for this role",
-        "DefaultValue": true,
-        "AvailableInGame": true
-      },
-      {
         "Name": "Marshal",
         "Description": "Enables tos1 style targeting for this role",
         "DefaultValue": true,
