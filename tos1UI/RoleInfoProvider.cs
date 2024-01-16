@@ -37,7 +37,8 @@ namespace tos1UI
             { Role.JAILOR, "Jailor" },{Role.ADMIRER, "Admirer"},{Role.MAYOR, "Mayor"},{Role.PIRATE, "Pirate"},
             {Role.EXECUTIONER, "Executioner"},{Role.CLERIC,"Cleric"},{Role.BODYGUARD,"Bodyguard"},{Role.VETERAN, "Veteran"},
             {Role.JESTER, "Jester"}, {Role.TRAPPER,"Trapper"},{Role.ARSONIST,"Arsonist"}, {Role.CORONER, "Coroner"},{Role.SHROUD, "Shroud"},
-            {Role.SERIALKILLER, "Serial Killer"}, {Role.POISONER, "Poisoner"}, {Role.MARSHAL, "Marshal"}, {Role.SOCIALITE, "Socialite"}
+            {Role.SERIALKILLER, "Serial Killer"}, {Role.POISONER, "Poisoner"}, {Role.MARSHAL, "Marshal"}, {Role.SOCIALITE, "Socialite"},
+            {Role.COVENLEADER, "Coven Leader"}
         };
 
         private static readonly List<Role> remember = new List<Role>
