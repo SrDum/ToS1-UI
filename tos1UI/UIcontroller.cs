@@ -30,6 +30,8 @@ namespace tos1UI
         public static bool specialUnlocked = false;
         public static string abilityName = "";
         public static int specialCharges = -69;
+        public static bool rememberPressed = false;
+        public static bool isDay = false;
         private static PipController pips;
         private static PipController fpips;
         private static RoleCardPanel panel;
@@ -53,7 +55,9 @@ namespace tos1UI
         public static void onRoleChange(ref RoleCardPanel __instance)
         {
             flag = false;
+            lastClicked = -1;
             specialUnlocked = false;
+            rememberPressed = false;
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
@@ -94,10 +98,21 @@ namespace tos1UI
 
         [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
         [HarmonyPostfix]
-        public static void onPlayPhaseChanged()
+        public static void onPlayPhaseChanged(ref TosAbilityPanel __instance)
         {
             flag = true;
+            RoleInfo info = RoleInfoProvider.getInfo(Service.Game.Sim.simulation.myIdentity.Data.role);
+            if (info.AbilityTargetType == SpecialAbilityTargetType.DeadMenu && Service.Game.Sim.info.daytime.Data.IsDaytime() && !isDay)
+            {
+                isDay = true;
+                __instance.OnClickFilterAll();
+            }
+            else
+            {
+                isDay = false;
+            }
         }
+        
 
         [HarmonyPatch(typeof(TosAbilityPanelListItem), nameof(TosAbilityPanelListItem.Update))]
         [HarmonyPostfix]
@@ -108,7 +123,7 @@ namespace tos1UI
                 RoleInfo info = RoleInfoProvider.getInfo(role);
                 if (!info.isModified) return;
                 if (!ModSettings.GetBool("Old " + info.configName)) return;
-                if (info.AbilityTargetType == SpecialAbilityTargetType.Menu)
+                if (info.AbilityTargetType == SpecialAbilityTargetType.Menu || info.AbilityTargetType == SpecialAbilityTargetType.DeadMenu)
                 {
                     List<int> choices = Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data
                         .choices;
@@ -138,6 +153,18 @@ namespace tos1UI
                     }
                 }
 
+                if (info.AbilityTargetType == SpecialAbilityTargetType.SelfAndOthers)
+                {
+                    if (pos == Service.Game.Sim.simulation.myIdentity.Data.position)
+                    {
+                        __instance.choice2Sprite.sprite = abilityIcon;
+                        __instance.choice2Text.text = abilityName;
+                        if(rememberPressed) __instance.choice2Button.Select();
+                        __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
+                        __instance.choice2Button.gameObject.SetActive(true);
+                    }
+                }
+
                 render[pos] = false;
         }
 
@@ -151,14 +178,15 @@ namespace tos1UI
             Console.Out.Write("[ToS 1 UI] Role is not Necromancer");
             if (!info.isModified) return true;
             Console.Out.Write("[ToS 1 UI] role is modded");
-            if (!specialUnlocked || !ModSettings.GetBool("Old " + info.configName)) return true;
+            if (!specialUnlocked || !ModSettings.GetBool(info.configName)) return true;
             __instance.PlaySound("Audio/UI/ClickSound.wav");
             MenuChoiceMessage message = new MenuChoiceMessage();
             message.choiceType = MenuChoiceType.SpecialAbility;
             message.choiceMode = MenuChoiceMode.TargetPosition;
             int pos = __instance.characterPosition;
+            int myPos = Service.Game.Sim.simulation.myIdentity.Data.position;
             
-            if (info.AbilityTargetType == SpecialAbilityTargetType.Menu)
+            if (info.AbilityTargetType == SpecialAbilityTargetType.Menu || info.AbilityTargetType == SpecialAbilityTargetType.DeadMenu)
             {
                 lastClicked = pos;
                 message.targetIndex = pos;
@@ -169,6 +197,24 @@ namespace tos1UI
                 }
                 Service.Game.Network.Send((GameMessage) message);
                 return false;
+            }
+
+            if (info.AbilityTargetType == SpecialAbilityTargetType.SelfAndOthers)
+            {
+                if (__instance.characterPosition == myPos)
+                {
+                    __instance.PlaySound("Audio/UI/ClickSound.wav");
+                    if (!__instance.choice2Button.selected)
+                    {
+                        message.choiceMode = MenuChoiceMode.Cancel;
+                        if (info.remember) rememberPressed = false;
+                    }
+
+                    if (info.remember) rememberPressed = true;
+                    Service.Game.Network.Send((GameMessage) message);
+                    return false;
+
+                }
             }
 
            
