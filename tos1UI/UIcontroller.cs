@@ -122,7 +122,7 @@ namespace tos1UI
                 if (!specialUnlocked || !render[pos]) return;
                 RoleInfo info = RoleInfoProvider.getInfo(role);
                 if (!info.isModified) return;
-                if (!ModSettings.GetBool("Old " + info.configName)) return;
+                if (!ModSettings.GetBool(info.configName)) return;
                 if (info.AbilityTargetType == SpecialAbilityTargetType.Menu || info.AbilityTargetType == SpecialAbilityTargetType.DeadMenu)
                 {
                     List<int> choices = Service.Game.Sim.info.menuChoiceObservations[MenuChoiceType.SpecialAbility].Data
@@ -229,7 +229,7 @@ namespace tos1UI
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (info.AbilityTargetType == SpecialAbilityTargetType.Necromancer) return true;
             if (!info.isModified) return true;
-            if (!ModSettings.GetBool("Old " + info.configName)) return true;
+            if (!ModSettings.GetBool(info.configName)) return true;
             int myPos = Service.Game.Sim.simulation.myIdentity.Data.position;
             MenuChoiceMessage message = new MenuChoiceMessage();
             message.choiceType = MenuChoiceType.SpecialAbility;
