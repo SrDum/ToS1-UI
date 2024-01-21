@@ -36,6 +36,9 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="SalemModLoader">
+          <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Town of Salem 2\BepInEx\plugins\SalemModLoader.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
@@ -57,9 +60,6 @@
         </Reference>
         <Reference Include="Assembly-CSharp">
             <HintPath>bin\Release\Assembly-CSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="SalemModLoader">
-            <HintPath>bin\Release\SalemModLoader.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -95,6 +95,9 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="resources\icon.thumbnail.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="bin\Debug\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

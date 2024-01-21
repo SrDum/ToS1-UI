@@ -6,7 +6,7 @@
   "Version": "2.1.0",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
-  "ConflictingMods": [],
+  "ConflictingMods": ["curtis.tuba.better.tos2"],
   "Settings": {
     "CheckboxSettings": [
       {
