@@ -36,6 +36,9 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="BetterTOS2">
+          <HintPath>bin\Debug\BetterTOS2.dll</HintPath>
+        </Reference>
         <Reference Include="SalemModLoader">
           <HintPath>..\..\..\Library\Application Support\Steam\steamapps\common\Town of Salem 2\BepInEx\plugins\SalemModLoader.dll</HintPath>
         </Reference>
@@ -46,12 +49,14 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="borrowedCode\ChatUtils.cs" />
+        <Compile Include="RoleInfoProvider.cs" />
+        <Compile Include="RoleInfoProviderBtos.cs" />
         <Compile Include="UIcontroller.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="OldPlayerPosition.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="RoleInfo.cs" />
-        <Compile Include="RoleInfoProvider.cs" />
+        <Compile Include="RoleInfoProviderVanilla.cs" />
         <Compile Include="SpecialAbilityTargetType.cs" />
     </ItemGroup>
     <ItemGroup>

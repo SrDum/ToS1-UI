@@ -1,20 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Game.Interface;
-using Game.Services;
 using SML;
 using HarmonyLib;
 using Server.Shared.Extensions;
 using Server.Shared.Info;
 using Server.Shared.Messages;
 using Server.Shared.State;
-using Server.Shared.State.Chat;
-using tos1UI.borrowedCode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Service = Services.Service;
 
 namespace tos1UI
@@ -61,7 +56,7 @@ namespace tos1UI
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
-            if (info.isModified) __instance.specialAbilityPanel.Hide(); 
+            if (info.isModified  && !ModSettings.GetBool("Also Keep Vanilla Buttons")) __instance.specialAbilityPanel.Hide(); 
             if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             if (info.isModified) abilityDec = __instance.specialAbilityPanel.abilityDesc;
@@ -386,7 +381,7 @@ namespace tos1UI
         public static void hide(ref RoleCardPopupPanel __instance)
         {
             RoleInfo info = RoleInfoProvider.getInfo(__instance.myData.role);
-            if (info.isModified)
+            if (info.isModified && !ModSettings.GetBool("Also Keep Vanilla Buttons"))
             {
                 __instance.specialAbilityPanel.Hide();
             }
