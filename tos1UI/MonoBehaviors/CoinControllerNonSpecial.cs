@@ -77,6 +77,7 @@ namespace tos1UI.MonoBehaviors
             {
                 button.Select();
             }
+            button.onClick.Invoke();
             
         }
 
