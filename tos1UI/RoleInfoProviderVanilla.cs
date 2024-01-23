@@ -46,6 +46,7 @@ namespace tos1UI
         {
             Role.SHROUD, Role.SERIALKILLER
         };
+
         
         private static List<Role> modifiedRoles = new List<Role>();
         

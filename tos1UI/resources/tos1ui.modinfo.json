@@ -3,7 +3,7 @@
   "DisplayName": "ToS1 UI",
   "Authors": ["Dum"],
   "Description": "Bring back ToS1 style ability buttons wherever possible. Necromancer has been removed, to be re-added in future update",
-  "Version": "2.2.0",
+  "Version": "2.3.0",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
   "ConflictingMods": [],

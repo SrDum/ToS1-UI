@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BetterTOS2;
 using Server.Shared.State;
 
@@ -46,6 +47,8 @@ namespace tos1UI
             RolePlus.SHROUD, RolePlus.SERIAL_KILLER
         };
         
+     
+        
         private static List<Role> modifiedRolesBtos = new List<Role>();
         
         static RoleInfoProviderBtos()
@@ -70,7 +73,7 @@ namespace tos1UI
             if (SelfTargetRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.Self;
             if (DeadMenuRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.DeadMenu;
             if (SelfAndOthersRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.SelfAndOthers;
-            return new RoleInfo(targetType, modified,configName, track, remem); 
+            return new RoleInfo(targetType, modified,configName, track, remem);
         }
     }
 }

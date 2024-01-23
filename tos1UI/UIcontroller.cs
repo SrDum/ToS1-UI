@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using BMG.UI;
 using Game.Interface;
+using Game.Services;
 using SML;
 using HarmonyLib;
 using Server.Shared.Extensions;
 using Server.Shared.Info;
 using Server.Shared.Messages;
 using Server.Shared.State;
+using tos1UI.MonoBehaviors;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -32,6 +35,12 @@ namespace tos1UI
         private static RoleCardPanel panel;
         private static RoleCardPopupPanel foo;
         private static string abilityDec;
+        public static BMG_Button selfButton;
+        public static TosAbilityPanelListItem ownListItem;
+        public static GameObject coinCanvas;
+        public static GameObject coin;
+        public static bool hasSpawned = false;
+        public static bool isCinematicPlaying = false;
 
         public static bool[] render =
         {
@@ -47,11 +56,11 @@ namespace tos1UI
         
         [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.ValidateSpecialAbilityPanel))]
         [HarmonyPostfix]
-        public static void onRoleChange(ref RoleCardPanel __instance)
+        public static void onSpecialAbilityInfoChange(ref RoleCardPanel __instance)
         {
             flag = false;
             lastClicked = -1;
-            specialUnlocked = false;
+            specialUnlocked = __instance.cachedRoleData.specialAbilityAvailable; 
             rememberPressed = false;
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
@@ -60,6 +69,15 @@ namespace tos1UI
             if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             if (info.isModified) abilityDec = __instance.specialAbilityPanel.abilityDesc;
+            if (info.isModified && (info.AbilityTargetType == SpecialAbilityTargetType.Self ||
+                                    info.AbilityTargetType == SpecialAbilityTargetType.SelfAndOthers 
+                                    )
+                 && !hasSpawned)
+            {
+                coinCanvas = GameObject.Instantiate(Main.CoinCanvas);
+                coin = coinCanvas.transform.GetChild(0).gameObject;
+                hasSpawned = true;
+            }
         }
 
         [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.Update))]
@@ -145,6 +163,9 @@ namespace tos1UI
                         __instance.choice1Text.text = abilityName;
                         __instance.choice1ButtonCanvasGroup.EnableRenderingAndInteraction();
                         __instance.choice1Button.gameObject.SetActive(true);
+                        selfButton = __instance.choice1Button;
+                        ownListItem = __instance;
+                        coin.GetComponent<CoinController>().Enable(specialCharges);
                     }
                 }
 
@@ -157,6 +178,9 @@ namespace tos1UI
                         if(rememberPressed) __instance.choice2Button.Select();
                         __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
                         __instance.choice2Button.gameObject.SetActive(true);
+                        selfButton = __instance.choice2Button;
+                        ownListItem = __instance;
+                        coin.GetComponent<CoinController>().Enable(specialCharges);
                     }
                 }
 
@@ -168,6 +192,7 @@ namespace tos1UI
         [HarmonyPrefix]
         public static bool onClickChoice2(ref TosAbilityPanelListItem __instance)
         {
+            
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (info.AbilityTargetType == SpecialAbilityTargetType.Necromancer) return true;
             Console.Out.Write("[ToS 1 UI] Role is not Necromancer");
@@ -384,6 +409,26 @@ namespace tos1UI
             if (info.isModified && !ModSettings.GetBool("Also Keep Vanilla Buttons"))
             {
                 __instance.specialAbilityPanel.Hide();
+            }
+        }
+
+        [HarmonyPatch(typeof(CinematicService), nameof(CinematicService.StartCinematic))]
+        [HarmonyPostfix]
+        public static void OnStartCinematic()
+        {
+            if (coin != null)
+            {
+                coinCanvas.GetComponent<Canvas>().enabled = false;
+            }
+        }
+
+        [HarmonyPatch(typeof(CinematicService), nameof(CinematicService.EndCinematic))]
+        [HarmonyPostfix]
+        public static void OnEndCinematic()
+        {
+            if (coin != null)
+            {
+                coinCanvas.GetComponent<Canvas>().enabled = true;
             }
         }
     }

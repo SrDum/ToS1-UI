@@ -49,6 +49,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="borrowedCode\ChatUtils.cs" />
+        <Compile Include="MonoBehaviors\CoinController.cs" />
         <Compile Include="RoleInfoProvider.cs" />
         <Compile Include="RoleInfoProviderBtos.cs" />
         <Compile Include="UIcontroller.cs" />
@@ -72,6 +73,12 @@
         <Reference Include="System.Xml" />
         <Reference Include="Unity.TextMeshPro">
             <HintPath>bin\Release\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AnimationModule">
+          <HintPath>bin\Debug\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AssetBundleModule">
+          <HintPath>bin\Debug\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>bin\Release\UnityEngine.CoreModule.dll</HintPath>
@@ -100,6 +107,8 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="resources\icon.thumbnail.png" />
+        <EmbeddedResource Include="resources\tos1ui_mac" />
+        <EmbeddedResource Include="resources\tos1ui"/>
     </ItemGroup>
     <ItemGroup>
       <Folder Include="bin\Debug\" />
