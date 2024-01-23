@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using BMG.UI;
 using Game.Interface;
 using Game.Services;
 using SML;
@@ -9,12 +9,10 @@ using Server.Shared.Extensions;
 using Server.Shared.Info;
 using Server.Shared.Messages;
 using Server.Shared.State;
-using Server.Shared.State.Chat;
-using tos1UI.borrowedCode;
+using tos1UI.MonoBehaviors;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Service = Services.Service;
 
 namespace tos1UI
@@ -25,11 +23,14 @@ namespace tos1UI
 
         public static Role role = Role.NONE;
         public static Sprite abilityIcon;
+        public static Sprite normalIcon;
         public static int lastClicked = -1;
         public static bool flag = false;
         public static bool specialUnlocked = false;
+        public static bool normalUnlocked = false;
         public static string abilityName = "";
         public static int specialCharges = -69;
+        public static int normalCharges;
         public static bool rememberPressed = false;
         public static bool isDay = false;
         private static PipController pips;
@@ -37,6 +38,12 @@ namespace tos1UI
         private static RoleCardPanel panel;
         private static RoleCardPopupPanel foo;
         private static string abilityDec;
+        public static BMG_Button selfButton;
+        public static TosAbilityPanelListItem ownListItem;
+        public static GameObject coinCanvas;
+        public static GameObject coin;
+        public static bool hasSpawned = false;
+        public static bool isCinematicPlaying = false;
 
         public static bool[] render =
         {
@@ -52,19 +59,37 @@ namespace tos1UI
         
         [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.ValidateSpecialAbilityPanel))]
         [HarmonyPostfix]
-        public static void onRoleChange(ref RoleCardPanel __instance)
+        public static void onSpecialAbilityInfoChange(ref RoleCardPanel __instance)
         {
             flag = false;
             lastClicked = -1;
-            specialUnlocked = false;
+            specialUnlocked = __instance.cachedRoleData.specialAbilityAvailable; 
             rememberPressed = false;
             set(false);
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
-            if (info.isModified) __instance.specialAbilityPanel.Hide(); 
+            if (info.isModified  && !ModSettings.GetBool("Also Keep Vanilla Buttons")) __instance.specialAbilityPanel.Hide(); 
             if (info.isModified) abilityIcon = __instance.specialAbilityPanel.useButton.abilityIcon.sprite;
             if (info.isModified) abilityName = __instance.specialAbilityPanel.abilityText.text;
             if (info.isModified) abilityDec = __instance.specialAbilityPanel.abilityDesc;
+            if (info.isModified && (info.AbilityTargetType == SpecialAbilityTargetType.Self ||
+                                    info.AbilityTargetType == SpecialAbilityTargetType.SelfAndOthers 
+                                    )
+                 && !hasSpawned)
+            {
+                coinCanvas = GameObject.Instantiate(Main.CoinCanvas);
+                coin = coinCanvas.transform.GetChild(0).gameObject;
+                coin.AddComponent<CoinController>();
+                hasSpawned = true;
+            }
+
+            if (info.isJailor && !hasSpawned)
+            {
+                coinCanvas = GameObject.Instantiate(Main.JailorCoinCanvas);
+                coin = coinCanvas.transform.GetChild(0).gameObject;
+                coin.AddComponent<CoinControllerNonSpecial>();
+                hasSpawned = true;
+            }
         }
 
         [HarmonyPatch(typeof(RoleCardPanel),nameof(RoleCardPanel.Update))]
@@ -94,6 +119,11 @@ namespace tos1UI
             {
                 specialCharges = -69;
             }
+
+            if (info.isJailor)
+            {
+                normalCharges = data.normalAbilityRemaining;
+            }
         }
 
         [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
@@ -110,6 +140,27 @@ namespace tos1UI
             else
             {
                 isDay = false;
+            }
+
+            if (info.isJailor)
+            {
+                MenuChoiceObservation observation;
+                normalUnlocked = Service.Game.Sim.info.menuChoiceObservations.TryGetValue(MenuChoiceType.NightAbility,
+                    out observation);
+                if (observation == null)
+                {
+                    normalUnlocked = false;
+                    return;
+                }
+                normalUnlocked = observation.Data.choices.Count > 0;
+                if (normalUnlocked)
+                {
+                    var controller = coin.GetComponent<CoinControllerNonSpecial>();
+                    controller.ListItem =
+                        __instance.playerListPlayers.Find(item =>
+                            item.characterPosition == observation.Data.choices[0]);
+                    controller.Enable(normalCharges);
+                }
             }
         }
         
@@ -150,6 +201,9 @@ namespace tos1UI
                         __instance.choice1Text.text = abilityName;
                         __instance.choice1ButtonCanvasGroup.EnableRenderingAndInteraction();
                         __instance.choice1Button.gameObject.SetActive(true);
+                        selfButton = __instance.choice1Button;
+                        ownListItem = __instance;
+                        coin.GetComponent<CoinController>().Enable(specialCharges);
                     }
                 }
 
@@ -162,6 +216,9 @@ namespace tos1UI
                         if(rememberPressed) __instance.choice2Button.Select();
                         __instance.choice2ButtonCanvasGroup.EnableRenderingAndInteraction();
                         __instance.choice2Button.gameObject.SetActive(true);
+                        selfButton = __instance.choice2Button;
+                        ownListItem = __instance;
+                        coin.GetComponent<CoinController>().Enable(specialCharges);
                     }
                 }
 
@@ -173,6 +230,7 @@ namespace tos1UI
         [HarmonyPrefix]
         public static bool onClickChoice2(ref TosAbilityPanelListItem __instance)
         {
+            
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (info.AbilityTargetType == SpecialAbilityTargetType.Necromancer) return true;
             Console.Out.Write("[ToS 1 UI] Role is not Necromancer");
@@ -259,6 +317,10 @@ namespace tos1UI
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (!info.isModified) return;
+            if (info.isJailor)
+            {
+                normalIcon = __instance.roleInfoButtons[0].abilityIcon.sprite;
+            }
             int uses = Service.Game.Sim.info.roleCardObservation.Data.specialAbilityTotal;
             panel = __instance;
             if (uses == -1)
@@ -386,9 +448,31 @@ namespace tos1UI
         public static void hide(ref RoleCardPopupPanel __instance)
         {
             RoleInfo info = RoleInfoProvider.getInfo(__instance.myData.role);
-            if (info.isModified)
+            if (info.isModified && !ModSettings.GetBool("Also Keep Vanilla Buttons"))
             {
                 __instance.specialAbilityPanel.Hide();
+            }
+
+           
+        }
+
+        [HarmonyPatch(typeof(CinematicService), nameof(CinematicService.StartCinematic))]
+        [HarmonyPostfix]
+        public static void OnStartCinematic()
+        {
+            if (coin != null)
+            {
+                coinCanvas.GetComponent<Canvas>().enabled = false;
+            }
+        }
+
+        [HarmonyPatch(typeof(CinematicService), nameof(CinematicService.EndCinematic))]
+        [HarmonyPostfix]
+        public static void OnEndCinematic()
+        {
+            if (coin != null)
+            {
+                coinCanvas.GetComponent<Canvas>().enabled = true;
             }
         }
     }

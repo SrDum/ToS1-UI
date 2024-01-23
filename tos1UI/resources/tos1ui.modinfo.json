@@ -3,10 +3,10 @@
   "DisplayName": "ToS1 UI",
   "Authors": ["Dum"],
   "Description": "Bring back ToS1 style ability buttons wherever possible. Necromancer has been removed, to be re-added in future update",
-  "Version": "2.1.0",
+  "Version": "2.3.0",
   "Platforms": ["Windows", "Mac"],
   "RequiredMods": [],
-  "ConflictingMods": ["curtis.tuba.better.tos2"],
+  "ConflictingMods": [],
   "Settings": {
     "CheckboxSettings": [
       {
@@ -112,8 +112,38 @@
         "AvailableInGame": true
       },
       {
+        "Name": "Judge",
+        "Description": "Enables tos1 style targeting for this role. THIS IS A BTOS2 ROLE, IT WILL NOT AFFECT VANILLA",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Auditor",
+        "Description": "Enables tos1 style targeting for this role. THIS IS A BTOS2 ROLE, IT WILL NOT AFFECT VANILLA",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Starspawn",
+        "Description": "Enables tos1 style targeting for this role. THIS IS A BTOS2 ROLE, IT WILL NOT AFFECT VANILLA",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Inquisitor",
+        "Description": "Enables tos1 style targeting for this role. THIS IS A BTOS2 ROLE, IT WILL NOT AFFECT VANILLA",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
         "Name": "Old Player List",
         "Description": "Makes player positions be fixed when on the show living tab",
+        "DefaultValue": true,
+        "AvailableInGame": true
+      },
+      {
+        "Name": "Also Keep Vanilla Buttons",
+        "Description": "When turned on, the vanilla special ability buttons will still be available.",
         "DefaultValue": false,
         "AvailableInGame": true
       }
