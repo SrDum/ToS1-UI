@@ -73,7 +73,8 @@ namespace tos1UI
             if (SelfTargetRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.Self;
             if (DeadMenuRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.DeadMenu;
             if (SelfAndOthersRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.SelfAndOthers;
-            return new RoleInfo(targetType, modified,configName, track, remem);
+            bool isJailor = role == RolePlus.JAILOR;
+            return new RoleInfo(targetType, modified,configName, track, remem, isJailor);
         }
     }
 }

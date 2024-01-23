@@ -23,11 +23,14 @@ namespace tos1UI
 
         public static Role role = Role.NONE;
         public static Sprite abilityIcon;
+        public static Sprite normalIcon;
         public static int lastClicked = -1;
         public static bool flag = false;
         public static bool specialUnlocked = false;
+        public static bool normalUnlocked = false;
         public static string abilityName = "";
         public static int specialCharges = -69;
+        public static int normalCharges;
         public static bool rememberPressed = false;
         public static bool isDay = false;
         private static PipController pips;
@@ -76,6 +79,15 @@ namespace tos1UI
             {
                 coinCanvas = GameObject.Instantiate(Main.CoinCanvas);
                 coin = coinCanvas.transform.GetChild(0).gameObject;
+                coin.AddComponent<CoinController>();
+                hasSpawned = true;
+            }
+
+            if (info.isJailor && !hasSpawned)
+            {
+                coinCanvas = GameObject.Instantiate(Main.JailorCoinCanvas);
+                coin = coinCanvas.transform.GetChild(0).gameObject;
+                coin.AddComponent<CoinControllerNonSpecial>();
                 hasSpawned = true;
             }
         }
@@ -107,6 +119,11 @@ namespace tos1UI
             {
                 specialCharges = -69;
             }
+
+            if (info.isJailor)
+            {
+                normalCharges = data.normalAbilityRemaining;
+            }
         }
 
         [HarmonyPatch(typeof(TosAbilityPanel), nameof(TosAbilityPanel.HandlePlayPhaseChanged))]
@@ -123,6 +140,27 @@ namespace tos1UI
             else
             {
                 isDay = false;
+            }
+
+            if (info.isJailor)
+            {
+                MenuChoiceObservation observation;
+                normalUnlocked = Service.Game.Sim.info.menuChoiceObservations.TryGetValue(MenuChoiceType.NightAbility,
+                    out observation);
+                if (observation == null)
+                {
+                    normalUnlocked = false;
+                    return;
+                }
+                normalUnlocked = observation.Data.choices.Count > 0;
+                if (normalUnlocked)
+                {
+                    var controller = coin.GetComponent<CoinControllerNonSpecial>();
+                    controller.ListItem =
+                        __instance.playerListPlayers.Find(item =>
+                            item.characterPosition == observation.Data.choices[0]);
+                    controller.Enable(normalCharges);
+                }
             }
         }
         
@@ -279,6 +317,10 @@ namespace tos1UI
             role = Service.Game.Sim.simulation.myIdentity.Data.role;
             RoleInfo info = RoleInfoProvider.getInfo(role);
             if (!info.isModified) return;
+            if (info.isJailor)
+            {
+                normalIcon = __instance.roleInfoButtons[0].abilityIcon.sprite;
+            }
             int uses = Service.Game.Sim.info.roleCardObservation.Data.specialAbilityTotal;
             panel = __instance;
             if (uses == -1)
@@ -410,6 +452,8 @@ namespace tos1UI
             {
                 __instance.specialAbilityPanel.Hide();
             }
+
+           
         }
 
         [HarmonyPatch(typeof(CinematicService), nameof(CinematicService.StartCinematic))]

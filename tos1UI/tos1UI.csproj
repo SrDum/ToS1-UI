@@ -50,6 +50,7 @@
     <ItemGroup>
         <Compile Include="borrowedCode\ChatUtils.cs" />
         <Compile Include="MonoBehaviors\CoinController.cs" />
+        <Compile Include="MonoBehaviors\CoinControllerNonSpecial.cs" />
         <Compile Include="RoleInfoProvider.cs" />
         <Compile Include="RoleInfoProviderBtos.cs" />
         <Compile Include="UIcontroller.cs" />

@@ -12,7 +12,13 @@ namespace System.Runtime.CompilerServices
 
 namespace tos1UI
 {
-    
-    
-    public record RoleInfo(SpecialAbilityTargetType AbilityTargetType, bool isModified, string configName, bool track, bool remember);
+
+
+    public record RoleInfo(
+        SpecialAbilityTargetType AbilityTargetType,
+        bool isModified,
+        string configName,
+        bool track,
+        bool remember,
+        bool isJailor = false);
 }

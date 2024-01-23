@@ -18,13 +18,14 @@ namespace tos1UI
 
         public static AssetBundle Bundle;
         public static GameObject CoinCanvas;
+        public static GameObject JailorCoinCanvas;
         
         public void Start()
         {
             Bundle = FromAssetBundle.GetAssetBundleFromResources("tos1UI.resources.tos1ui",
                 Assembly.GetExecutingAssembly());
             CoinCanvas = Bundle.LoadAsset<GameObject>("Canvas");
-            CoinCanvas.transform.GetChild(0).gameObject.AddComponent<CoinController>();
+            JailorCoinCanvas = Bundle.LoadAsset<GameObject>("Canvas");
             Console.Out.Write(("[ToS1 UI] has loaded!"));
         }
     }
