@@ -43,7 +43,7 @@ namespace tos1UI
         public static GameObject coinCanvas;
         public static GameObject coin;
         public static bool hasSpawned = false;
-        public static bool isCinematicPlaying = false;
+
 
         public static bool[] render =
         {

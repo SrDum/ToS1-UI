@@ -36,6 +36,9 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\..\ColorSwapperPlus\ColorSwapperPlus\Libs\Assembly-CSharp.dll</HintPath>
+        </Reference>
         <Reference Include="BetterTOS2">
           <HintPath>bin\Debug\BetterTOS2.dll</HintPath>
         </Reference>
@@ -46,6 +49,9 @@
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine.UIModule">
+          <HintPath>..\..\ColorSwapperPlus\ColorSwapperPlus\Libs\UnityEngine.UIModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="borrowedCode\ChatUtils.cs" />
@@ -65,15 +71,12 @@
         <Reference Include="0Harmony">
             <HintPath>bin\Release\0Harmony.dll</HintPath>
         </Reference>
-        <Reference Include="Assembly-CSharp">
-            <HintPath>bin\Release\Assembly-CSharp.dll</HintPath>
-        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="Unity.TextMeshPro">
-            <HintPath>bin\Release\Unity.TextMeshPro.dll</HintPath>
+          <HintPath>..\..\ColorSwapperPlus\ColorSwapperPlus\Libs\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule">
           <HintPath>bin\Debug\UnityEngine.AnimationModule.dll</HintPath>
@@ -82,7 +85,7 @@
           <HintPath>bin\Debug\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-            <HintPath>bin\Release\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\..\ColorSwapperPlus\ColorSwapperPlus\Libs\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ImageConversionModule">
             <HintPath>bin\Release\UnityEngine.ImageConversionModule.dll</HintPath>
@@ -98,9 +101,6 @@
         </Reference>
         <Reference Include="UnityEngine.UIElementsNativeModule">
             <HintPath>bin\Release\UnityEngine.UIElementsNativeModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UIModule">
-            <HintPath>bin\Release\UnityEngine.UIModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>

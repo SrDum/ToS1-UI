@@ -46,8 +46,11 @@ namespace tos1UI
         {
             RolePlus.SHROUD, RolePlus.SERIAL_KILLER
         };
-        
-     
+
+        private static readonly List<Role> instantUseCoinBtos = new List<Role>
+        {
+            RolePlus.STARSPAWN, RolePlus.MAYOR, RolePlus.MARSHAL, RolePlus.JUDGE
+        };
         
         private static List<Role> modifiedRolesBtos = new List<Role>();
         
@@ -67,6 +70,7 @@ namespace tos1UI
             bool modified = modifiedRolesBtos.Contains(role);
             bool track = SafeModeTrackingBtos.Contains(role);
             bool remem = rememberBtos.Contains(role);
+            bool instantCoin = instantUseCoinBtos.Contains(role);
             string configName ="";
             if (modified) configName = configNamesBtos[role];
             if (MenuRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.Menu;
@@ -74,7 +78,7 @@ namespace tos1UI
             if (DeadMenuRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.DeadMenu;
             if (SelfAndOthersRolesBtos.Contains(role)) targetType = SpecialAbilityTargetType.SelfAndOthers;
             bool isJailor = role == RolePlus.JAILOR;
-            return new RoleInfo(targetType, modified,configName, track, remem, isJailor);
+            return new RoleInfo(targetType, modified,configName, track, remem, isJailor, instantCoin);
         }
     }
 }

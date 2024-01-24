@@ -49,8 +49,11 @@ namespace tos1UI
 
         
         private static List<Role> modifiedRoles = new List<Role>();
-        
-        
+
+        private static readonly List<Role> instantUseCoin = new List<Role>
+        {
+            Role.MAYOR,RolePlus.MARSHAL
+        };
         
         static RoleInfoProviderVanilla()
         {
@@ -68,15 +71,14 @@ namespace tos1UI
             bool track = SafeModeTracking.Contains(role);
             bool remem = remember.Contains(role);
             string configName ="";
+            bool isInstantCoin = instantUseCoin.Contains(role);
             if (modified) configName = configNames[role];
             if (MenuRoles.Contains(role)) targetType = SpecialAbilityTargetType.Menu;
             if (SelfTargetRoles.Contains(role)) targetType = SpecialAbilityTargetType.Self;
             if (DeadMenuRoles.Contains(role)) targetType = SpecialAbilityTargetType.DeadMenu;
             if (SelfAndOthersRoles.Contains(role)) targetType = SpecialAbilityTargetType.SelfAndOthers;
             bool isJailor = (role == Role.JAILOR);
-            return new RoleInfo(targetType, modified,configName, track, remem, isJailor);
+            return new RoleInfo(targetType, modified,configName, track, remem, isJailor,isInstantCoin);
         }
-
-        
     }
 }

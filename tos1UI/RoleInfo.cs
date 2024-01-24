@@ -20,5 +20,6 @@ namespace tos1UI
         string configName,
         bool track,
         bool remember,
-        bool isJailor = false);
+        bool isJailor = false,
+        bool isInstantUseCoin = false);
 }
