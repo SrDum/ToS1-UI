@@ -79,6 +79,7 @@ namespace tos1UI.MonoBehaviors
 
         public void Disable()
         {
+            flames.SetActive(false);
             _animation.clip = _disable;
             _animation.Play();
             try
